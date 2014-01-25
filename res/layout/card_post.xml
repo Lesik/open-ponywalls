@@ -117,7 +117,7 @@
 	        android:layout_height="wrap_content"
 	        android:text="@string/btn_download"
 	        android:drawableStart="@drawable/ic_action_download"
-	        style="@style/CardActionButtonWithIcon" />
+	        style="@style/CardActionButtonWithIconNoTopDivider" />
 	    
 	    <Button android:id="@id/view_in_calendar_button"
 	        android:layout_width="fill_parent"

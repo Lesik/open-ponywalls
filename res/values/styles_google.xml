@@ -54,6 +54,12 @@
         <item name="android:paddingStart">8.0dip</item>
     </style>
     
+    <style name="CardActionButtonWithIconNoTopDivider" parent="@style/CardActionButton">
+        <item name="android:paddingLeft">@dimen/card_padding_nodivider</item>
+        <item name="android:paddingRight">@dimen/card_padding_nodivider</item>
+        <item name="android:background">@null</item>
+    </style>
+    
     <style name="CardTitle" parent="@style/CardText">
         <item name="android:textSize">@dimen/card_large_text</item>
         <item name="android:textColor">@color/card_title_text</item>

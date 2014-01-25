@@ -240,6 +240,7 @@
     <dimen name="card_action_text">16.0sp</dimen>
     <dimen name="article_title">20.0sp</dimen>
     <dimen name="card_padding">16.0dip</dimen>
+    <dimen name="card_padding_nodivider">8.0dip</dimen>
     <dimen name="first_run_padding">16.0dip</dimen>
     <dimen name="text_block_top_padding">14.0dip</dimen>
     <dimen name="text_block_bottom_padding">20.0dip</dimen>
