@@ -1,12 +1,15 @@
 package com.lesikapk.ponywalls;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 
 
 public class HomeActivity extends SherlockFragmentActivity implements
@@ -54,15 +57,6 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
-		return true;
-	}
-
-	
-	
-	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
@@ -73,5 +67,20 @@ public class HomeActivity extends SherlockFragmentActivity implements
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment).commit();
 		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.home, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(getBaseContext(),SettingsActivity.class));
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

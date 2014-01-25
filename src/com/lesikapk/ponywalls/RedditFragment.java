@@ -62,8 +62,8 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		list.setDivider(null);
 		list.setDividerHeight(10);
 		list.setPadding(20, 20, 20, 20);
-		list.setClipToPadding(false);
-		list.setScrollBarSize(1);
+		list.setClipToPadding(false);				// !important
+		list.setVerticalScrollBarEnabled(false);
 		getView().getRootView().setBackgroundColor(getResources().getColor(R.color.gnow_bg));
 		populateList();
 		setListAdapter(postAdapter);
