@@ -60,7 +60,7 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		showProgressDialog();
 		list = getListView();
 		list.setDivider(null);
-		list.setDividerHeight(10);
+		list.setDividerHeight(20);
 		list.setPadding(20, 20, 20, 20);
 		list.setClipToPadding(false);				// !important
 		list.setVerticalScrollBarEnabled(false);
