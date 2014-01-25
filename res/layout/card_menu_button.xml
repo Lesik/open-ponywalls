@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton android:layout_gravity="end|top|center" android:id="@id/card_menu_button" android:visibility="visible" android:layout_width="@dimen/card_action_button_height" android:layout_height="@dimen/card_action_button_height" android:contentDescription="@string/accessibility_menu_button" style="@style/CardMenuButton"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

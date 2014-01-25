@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tab_names">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Rising</item>
+        <item>Controversial</item>
+        <item>Top</item>
+        <item>Gilded</item>
+    </string-array>
+</resources>

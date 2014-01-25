@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/card_title_with_menu" android:background="@drawable/bg_keyboard_focusable" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@+id/mycard_title" android:paddingLeft="@dimen/text_block_side_padding" android:paddingTop="@dimen/text_block_top_padding" android:paddingRight="@dimen/text_block_side_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" android:textAlignment="viewStart" android:paddingStart="@dimen/text_block_side_padding" android:paddingEnd="@dimen/text_block_side_padding" style="@style/CardTitle" />
+    <include android:layout_gravity="end|top|center" layout="@layout/card_menu_button" />
+</FrameLayout>

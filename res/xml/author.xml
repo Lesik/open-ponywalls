@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+        
+	<PreferenceCategory
+            android:title="Author">
+		<Preference
+		    android:layout="@layout/author_fragment"
+		    android:key="author_fragment" />
+		<PreferenceScreen
+		       android:title="Fork me on Github!"
+		       android:summary="OpenDashClockLauncher (OpenDCL) is completely open source and its code is available on Github">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/Lesik/open-dcl" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+	<PreferenceCategory
+            android:title="The developer would like to thank:">
+		<PreferenceScreen
+		     android:title='"Hosting Android Widgets"'
+		     android:summary="by Leonardo Fischer">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://leonardofischer.com/hosting-android-widgets-my-appwidgethost-tutorial/" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Android Support Library v13"
+		     android:summary="by Google/The Android Open Source Project">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://developer.android.com/tools/support-library/features.html#v13" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+</PreferenceScreen>
