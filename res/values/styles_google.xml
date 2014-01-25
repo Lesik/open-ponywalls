@@ -57,7 +57,7 @@
     <style name="CardActionButtonWithIconNoTopDivider" parent="@style/CardActionButton">
         <item name="android:paddingLeft">@dimen/card_padding_nodivider</item>
         <item name="android:paddingRight">@dimen/card_padding_nodivider</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">@drawable/card_action_button_background_nodivider</item>
     </style>
     
     <style name="CardTitle" parent="@style/CardText">

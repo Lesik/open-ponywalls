@@ -20,6 +20,8 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	 * current dropdown position.
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+	private String subreddit = "http://www.reddit.com/r/ponywalls/";
+	private String url;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,33 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
+		switch (position) {
+		case 0:
+			url = subreddit;
+			break;
+		case 1:
+			url = subreddit + "new/";
+			break;
+		case 2:
+			url = subreddit + "rising/";
+			break;
+		case 3:
+			url = subreddit + "controversial/";
+			break;
+		case 4:
+			url = subreddit + "top/";
+			break;
+		case 5:
+			url = subreddit + "gilded/";
+			break;
+		default:
+			url = null;
+			break;
+		}
 		SherlockListFragment fragment = new RedditFragment();
-//		Bundle args = new Bundle();
-//		args.putString(RedditFragment.ARG_SUBREDDIT_URL, subreddit);
-//		fragment.setArguments(args);
+		Bundle args = new Bundle();
+		args.putString(RedditFragment.ARG_SUBREDDIT_URL, url);
+		fragment.setArguments(args);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment).commit();
 		return true;

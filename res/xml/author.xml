@@ -6,26 +6,38 @@
 		<Preference
 		    android:layout="@layout/author_fragment"
 		    android:key="author_fragment" />
+	</PreferenceCategory>
+	<PreferenceCategory
+	    android:title="About">
 		<PreferenceScreen
 		       android:title="Fork me on Github!"
 		       android:summary="PonyWalls (open-ponywalls) is completely open source and its code is available on Github">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/Lesik/open-ponywalls" />
 		</PreferenceScreen>
-	</PreferenceCategory>
-	<PreferenceCategory
-            android:title="The developer would like to thank:">
 		<PreferenceScreen
-		     android:title="This application is based on RedditReader"
-		     android:summary="by Leonardo Fischer">
+			android:title="Based on RedditReader"
+			android:summary="by kanavg">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/kanavg/RedditReader" />
 		</PreferenceScreen>
+	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="Libraries">
 		<PreferenceScreen
 		     android:title="Android Support Library v13"
-		     android:summary="by kavavg">
+		     android:summary="by Google/The Android Open Source Project">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://developer.android.com/tools/support-library/features.html#v13" />
+		</PreferenceScreen>
+	</PreferenceCategory>
+	<PreferenceCategory
+	    android:title="Resources">
+		<PreferenceScreen
+		     android:title="Android Swipe-to-Dismiss"
+		     android:summary="by Roman Nurik">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/romannurik/Android-SwipeToDismiss" />
 		</PreferenceScreen>
 		<PreferenceScreen
 		     android:title="Google Now card background"
@@ -38,7 +50,10 @@
 		     android:summary="by Serafim S.">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="http://stackoverflow.com/a/12283909/1801496" />
-		</PreferenceScreen>
+		</PreferenceScreen>	    
+	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="The developer would like to thank:">
 		<PreferenceScreen
 		     android:title="Stack Overflow answer: clipToPadding"
 		     android:summary="by Gunnar Karlsson">
@@ -47,7 +62,7 @@
 		</PreferenceScreen>
 		<PreferenceScreen
 		     android:title="Stack Overflow answer: SherlockActionBar"
-		     android:summary="by Google/The Android Open Source Project">
+		     android:summary="by Smitty">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="http://stackoverflow.com/a/12889256/1801496" />
 		</PreferenceScreen>

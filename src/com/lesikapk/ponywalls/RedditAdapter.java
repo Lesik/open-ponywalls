@@ -96,7 +96,7 @@ public class RedditAdapter extends BaseAdapter {
         	i++;
         }
         else {
-	        Animation animation = AnimationUtils.loadAnimation(mContext, (index > lastPosition) ? R.anim.scroll_up_animation : R.anim.scroll_down_animation);
+	        Animation animation = AnimationUtils.loadAnimation(mContext, (index > lastPosition) ? R.anim.scroll_up_animation : R.anim.no_animation);
 	        convertView.startAnimation(animation);
 	        lastPosition = index;
         }

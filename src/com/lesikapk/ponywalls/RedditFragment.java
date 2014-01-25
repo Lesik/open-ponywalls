@@ -39,10 +39,10 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	public static final String ARG_SUBREDDIT_URL = "subreddit_url";
+	private String url;
 	private static RedditFragment mThis;
 	private ListView list;
 	private RequestQueue reqQueue;
-	private String url = "http://www.reddit.com/r/ponywalls/.json";
 	private ArrayList<RedditItem> itemArray;
 	private RedditAdapter postAdapter;
 	private Context mContext;
@@ -54,14 +54,13 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		postAdapter = new RedditAdapter(new ArrayList<RedditItem>(), getActivity());
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		mThis = this;
-		showProgressDialog();
+//		showProgressDialog();
 		list = getListView();
 		list.setDivider(null);
 		list.setDividerHeight(20);
@@ -80,7 +79,8 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-	    // This is the View which is created by ListFragment
+		url = getArguments().getString(ARG_SUBREDDIT_URL) + ".json";
+		// This is the View which is created by ListFragment
         ViewGroup viewGroup = (ViewGroup) view;
         // We need to create a PullToRefreshLayout manually
         mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
@@ -171,6 +171,26 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		reqQueue.add(jsonReq);
 		
 		getListView().setOnItemClickListener(this);
+		
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        getListView(),
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    itemArray.remove(postAdapter.getItem(position));
+//                                	postAdapter.remove(postAdapter.getItem(position));
+                                }
+                                postAdapter.notifyDataSetChanged();
+                            }
+                        });
+        getListView().setOnTouchListener(touchListener);
 	}
 	
 	
@@ -195,9 +215,9 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 					}
 				}
 				progressStatus++;
-				loadingProgress.setProgress(progressStatus);
+//				loadingProgress.setProgress(progressStatus);
 			}
-			loadingProgress.dismiss();
+//			loadingProgress.dismiss();
 
 		}
 		catch (JSONException e) {
