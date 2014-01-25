@@ -14,9 +14,11 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,7 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	public static final String ARG_SUBREDDIT_URL = "subreddit_url";
+	private static RedditFragment mThis;
 	private ListView list;
 	private RequestQueue reqQueue;
 	private String url = "http://www.reddit.com/r/ponywalls/.json";
@@ -57,6 +60,7 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		mThis = this;
 		showProgressDialog();
 		list = getListView();
 		list.setDivider(null);
@@ -68,6 +72,10 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		populateList();
 		setListAdapter(postAdapter);
 		super.onActivityCreated(savedInstanceState);
+	}
+	
+	public static RedditFragment getThis() {
+		return mThis;
 	}
 	
 	@Override
@@ -100,10 +108,7 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
             	getActivity().runOnUiThread(new Runnable() {
             		@Override
             		public void run() {
-            			setListAdapter(null);
-            			RedditAdapter.i = 0;
-            			populateList();
-            			setListAdapter(postAdapter);
+            			reloadPosts();
             		}
             	});
             	return null;
@@ -120,6 +125,13 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
                 }, 4000);
             }
 		}.execute();
+	}
+	
+	public void reloadPosts() {
+		setListAdapter(null);
+		RedditAdapter.i = 0;
+		populateList();
+		setListAdapter(postAdapter);
 	}
 	
 	private void showProgressDialog() {
@@ -172,8 +184,9 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 				RedditItem item = new RedditItem();
 				item.title = (String) child.opt("title");
 				if(item.title != null) {
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 					item.nsfw = (Boolean) child.optBoolean("over_18");
-					if(!item.nsfw) {
+					if(!item.nsfw || prefs.getBoolean("nsfw_enabled", false)) {
 						item.url = child.optString("url");
 						item.points = child.optInt("score");
 						item.subreddit = child.optString("subreddit");

@@ -80,6 +80,10 @@ public class HomeActivity extends SherlockFragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			startActivity(new Intent(getBaseContext(),SettingsActivity.class));
+		case R.id.action_reload:
+			RedditFragment.getThis().reloadPosts();
+		default:
+			// Nothing happens :)
 		}
 		return super.onOptionsItemSelected(item);
 	}

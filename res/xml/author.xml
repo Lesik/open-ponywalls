@@ -8,24 +8,54 @@
 		    android:key="author_fragment" />
 		<PreferenceScreen
 		       android:title="Fork me on Github!"
-		       android:summary="OpenDashClockLauncher (OpenDCL) is completely open source and its code is available on Github">
+		       android:summary="PonyWalls (open-ponywalls) is completely open source and its code is available on Github">
 			<intent android:action="android.intent.action.VIEW"
-			        android:data="https://github.com/Lesik/open-dcl" />
+			        android:data="https://github.com/Lesik/open-ponywalls" />
 		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
             android:title="The developer would like to thank:">
 		<PreferenceScreen
-		     android:title='"Hosting Android Widgets"'
+		     android:title="This application is based on RedditReader"
 		     android:summary="by Leonardo Fischer">
 			<intent android:action="android.intent.action.VIEW"
-			        android:data="http://leonardofischer.com/hosting-android-widgets-my-appwidgethost-tutorial/" />
+			        android:data="https://github.com/kanavg/RedditReader" />
 		</PreferenceScreen>
 		<PreferenceScreen
 		     android:title="Android Support Library v13"
-		     android:summary="by Google/The Android Open Source Project">
+		     android:summary="by kavavg">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://developer.android.com/tools/support-library/features.html#v13" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Google Now card background"
+		     android:summary="by Ryan Harter">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://ryanharter.com/blog/2013/01/31/how-to-make-an-android-card-list/" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="ResizableImageView"
+		     android:summary="by Serafim S.">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/12283909/1801496" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Stack Overflow answer: clipToPadding"
+		     android:summary="by Gunnar Karlsson">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/14459179/1801496" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Stack Overflow answer: SherlockActionBar"
+		     android:summary="by Google/The Android Open Source Project">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/12889256/1801496" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Stack Overflow answer: Hide ListView scrollbar"
+		     android:summary="by Igor Khrupin (ihrupin)">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/7062180/1801496" />
 		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>
