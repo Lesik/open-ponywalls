@@ -33,6 +33,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.sothree.multiitemrowlistadapter.MultiItemRowListAdapter;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class RedditFragment extends SherlockListFragment implements OnRefreshListener, OnItemClickListener {
@@ -63,13 +67,17 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 //		showProgressDialog();
 		list = getListView();
 		list.setDivider(null);
-		list.setDividerHeight(20);
-		list.setPadding(20, 20, 20, 20);
+		list.setDividerHeight(5);
+		list.setPadding(5, 5, 5, 20);
 		list.setClipToPadding(false);				// !important
 		list.setVerticalScrollBarEnabled(false);
 		getView().getRootView().setBackgroundColor(getResources().getColor(R.color.gnow_bg));
 		populateList();
-		setListAdapter(postAdapter);
+		int spacing = (int)getResources().getDimension(R.dimen.spacing);
+	    int itemsPerRow = getResources().getInteger(R.integer.items_per_row);
+	    MultiItemRowListAdapter wrapperAdapter = new MultiItemRowListAdapter(getActivity(), postAdapter, itemsPerRow, spacing);
+	    setListAdapter(wrapperAdapter);
+//		setListAdapter(postAdapter);
 		super.onActivityCreated(savedInstanceState);
 	}
 	
@@ -128,10 +136,10 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	}
 	
 	public void reloadPosts() {
-		setListAdapter(null);
-		RedditAdapter.i = 0;
-		populateList();
-		setListAdapter(postAdapter);
+//		setListAdapter(null);
+//		RedditAdapter.i = 0;
+//		populateList();
+//		setListAdapter(postAdapter);
 	}
 	
 	private void showProgressDialog() {
@@ -148,6 +156,7 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	private void populateList() {
 //		url = getArguments().getString(ARG_SUBREDDIT_URL);
 //		url = url+".json";
+		Crouton.makeText(getActivity(), "Loading...", Style.INFO).show();
 		mContext = getActivity();
 		reqQueue = Volley.newRequestQueue(getActivity());
 		itemArray = new ArrayList<RedditItem>();
@@ -185,7 +194,6 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
                                     itemArray.remove(postAdapter.getItem(position));
-//                                	postAdapter.remove(postAdapter.getItem(position));
                                 }
                                 postAdapter.notifyDataSetChanged();
                             }
@@ -214,6 +222,10 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		                itemArray.add(item);
 					}
 				}
+				else {
+					//
+					break;
+				}
 				progressStatus++;
 //				loadingProgress.setProgress(progressStatus);
 			}
@@ -232,4 +244,25 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 		startActivity(intent);		
 		
 	}
+	
+//	private void showCrouton() {
+//		LayoutInflater mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		View view = mInflater.inflate(R.layout.carddemo_extras_crouton_card, null);
+//		
+//		CardView cardView= (CardView)view.findViewById(R.id.carddemo_card_crouton_id);
+//		
+//		Card card = new Card(getActivity());
+//		card.setTitle("Crouton Card");
+//		card.setBackgroundResourceId(R.color.demoextra_card_background_color2);
+//		
+//		CardThumbnail thumb = new CardThumbnail(getActivity());
+//		thumb.setDrawableResource(R.drawable.ic_action_bulb);
+//		card.addCardThumbnail(thumb);
+//		
+//		cardView.setCard(card);
+//		
+//		final Crouton crouton;
+//		crouton = Crouton.make(getActivity(), view);
+//		crouton.show();
+//	}
 }

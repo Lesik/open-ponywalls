@@ -86,20 +86,20 @@ public class RedditAdapter extends BaseAdapter {
         else {
         	holder.thumb.setImageResource(R.drawable.emo_im_cool);
         }
-        if (i < 1) {
-        	// To make sure the first post is loaded with the right animation.
-        	// For whatever reason, the first list item uses a different animation than the others.
-        	// This if is run only once, when the first list item is loaded.
-        	Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scroll_up_animation);
-        	convertView.startAnimation(animation);
-	        lastPosition = index;
-        	i++;
-        }
-        else {
-	        Animation animation = AnimationUtils.loadAnimation(mContext, (index > lastPosition) ? R.anim.scroll_up_animation : R.anim.no_animation);
-	        convertView.startAnimation(animation);
-	        lastPosition = index;
-        }
+//        if (i < 1) {
+//        	// To make sure the first post is loaded with the right animation.
+//        	// For whatever reason, the first list item uses a different animation than the others.
+//        	// This if is run only once, when the first list item is loaded.
+//        	Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scroll_up_animation);
+//        	convertView.startAnimation(animation);
+//	        lastPosition = index;
+//        	i++;
+//        }
+//        else {
+//	        Animation animation = AnimationUtils.loadAnimation(mContext, (index > lastPosition) ? R.anim.scroll_up_animation : R.anim.no_animation);
+//	        convertView.startAnimation(animation);
+//	        lastPosition = index;
+//        }
         return convertView;
 	}
 }

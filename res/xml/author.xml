@@ -30,6 +30,24 @@
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://developer.android.com/tools/support-library/features.html#v13" />
 		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Multi Item Row ListAdapter"
+		     android:summary="by Umano/SoThree, Inc.">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/umano/MultiItemRowListAdapter" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="ActionBarSherlock"
+		     android:summary="by Jake Wharton">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/JakeWharton/ActionBarSherlock" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Crouton"
+		     android:summary="by Benjamin Weiss (keyboardsurfer)">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/keyboardsurfer/Crouton" />
+		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
 	    android:title="Resources">
