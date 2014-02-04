@@ -2,36 +2,33 @@ package com.lesikapk.ponywalls;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.novoda.imageloader.core.model.ImageTag;
+import com.novoda.imageloader.core.model.ImageTagFactory;
 
 public class RedditAdapter extends BaseAdapter {
 	
 	private ArrayList<RedditItem> list;
 	private Context mContext;
-	private int lastPosition;
+	private TextView votesPrefix;
+	private Button downloadButton;
+	private Button setWallpaperButton;
 	public static int i = 0;
 	
 	public static class ViewHolder {
 		TextView title;
-		TextView details;
+		TextView author;
 		TextView points;
-		ImageView thumb;
 		ImageView image;
 	}
 
@@ -52,54 +49,73 @@ public class RedditAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public View getView(int index, View convertView, ViewGroup arg2) {
+        // Initialize some stuff
 		ViewHolder holder = null;
-		LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		ImageTagFactory imageTagFactory = ImageTagFactory.newInstance(mContext, R.drawable.spinner);
+		imageTagFactory.setDefaultImageResId(R.drawable.spinner);
+		imageTagFactory.setErrorImageId(R.drawable.icn_error_404_cloud);
         if(convertView == null) {
         	convertView = LayoutInflater.from(mContext).inflate(R.layout.card_post, null);
-        	TextView votesPrefix = (TextView)convertView.findViewById(R.id.votes_prefix);
-        	votesPrefix.setText(mContext.getString(R.string.post_votes_prefix) + " ");
+        	
         	holder = new ViewHolder();
-            holder.title = (TextView)convertView.findViewById(R.id.mycard_title);
-            holder.details = (TextView)convertView.findViewById(R.id.mycard_time);
-            holder.points = (TextView)convertView.findViewById(R.id.votes);
-            holder.image = (ImageView)convertView.findViewById(R.id.imageView1);
+            holder.title 			= (TextView)convertView.findViewById(R.id.post_title);
+            holder.author 			= (TextView)convertView.findViewById(R.id.post_author);
+            holder.points 			= (TextView)convertView.findViewById(R.id.votes);
+        	holder.image			= (ImageView)convertView.findViewById(R.id.post_image);
+        	
+            votesPrefix 			= (TextView)convertView.findViewById(R.id.votes_prefix);
+        	downloadButton 			= (Button)convertView.findViewById(R.id.download_button);
+            setWallpaperButton 		= (Button)convertView.findViewById(R.id.set_wallpaper_button);
+            
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.image.setImageResource(R.drawable.spinner_holo);
+        // Title
         holder.title.setText(list.get(index).title);
-        holder.details.setText(list.get(index).subreddit);
+        
+        // Author
+        holder.author.setText(mContext.getString(R.string.post_author_prefix)+ " " + list.get(index).author);
+        
+        // Points
         int points = list.get(index).points;
         String text = Integer.toString(points) + " " + mContext.getString(R.string.post_votes_suffix);
+        votesPrefix.setText(mContext.getString(R.string.post_votes_prefix) + " ");
         holder.points.setText(text);
-        if(!list.get(index).thumbnail.isEmpty()) {
-        	UrlImageViewHelper.setUrlDrawable(holder.image, list.get(index).url);
-		}
-        else {
-        	holder.thumb.setImageResource(R.drawable.emo_im_cool);
+        
+        // Image
+        if(list.get(index).url != null) {
+	        ImageTag tag = imageTagFactory.build(list.get(index).url, mContext);
+	        ((ImageView) holder.image).setTag(tag);
+	        RedditFragment.getImageManager().getLoader().load(holder.image);
         }
-//        if (i < 1) {
-//        	// To make sure the first post is loaded with the right animation.
-//        	// For whatever reason, the first list item uses a different animation than the others.
-//        	// This if is run only once, when the first list item is loaded.
-//        	Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scroll_up_animation);
-//        	convertView.startAnimation(animation);
-//	        lastPosition = index;
-//        	i++;
-//        }
-//        else {
-//	        Animation animation = AnimationUtils.loadAnimation(mContext, (index > lastPosition) ? R.anim.scroll_up_animation : R.anim.no_animation);
-//	        convertView.startAnimation(animation);
-//	        lastPosition = index;
-//        }
+        setListeners();
         return convertView;
+	}
+	
+	private void setListeners() {
+		final RedditFragment currentInstance = RedditFragment.getThis();
+		
+		downloadButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				RedditFragment.getThis().startDownload( list.get(currentInstance.getPosForView(v)).title, list.get(currentInstance.getPosForView(v)).url);
+			}
+		});
+		
+        setWallpaperButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				RedditFragment.getThis().setWallpaper(list.get(currentInstance.getPosForView(v)).url);
+			}
+		});
 	}
 }

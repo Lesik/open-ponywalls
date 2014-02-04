@@ -1,29 +1,36 @@
 package com.lesikapk.ponywalls;
 
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -33,52 +40,74 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.LoaderSettings;
+import com.novoda.imageloader.core.LoaderSettings.SettingsBuilder;
+import com.novoda.imageloader.core.cache.LruBitmapCache;
 import com.sothree.multiitemrowlistadapter.MultiItemRowListAdapter;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 
-public class RedditFragment extends SherlockListFragment implements OnRefreshListener, OnItemClickListener {
+public class RedditFragment extends SherlockListFragment implements OnRefreshListener {
 	
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	public static final String ARG_SUBREDDIT_URL = "subreddit_url";
 	private String url;
 	private static RedditFragment mThis;
 	private ListView list;
+	private static ImageManager imageManager;
 	private RequestQueue reqQueue;
 	private ArrayList<RedditItem> itemArray;
 	private RedditAdapter postAdapter;
 	private Context mContext;
-	private ProgressDialog loadingProgress;
-	private int progressStatus;
 	private PullToRefreshLayout mPullToRefreshLayout;
 	public static final String TAG = "RedditReader";
 	public static final String URL = "URL";
+	private LinearLayout errorLayout;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View view = inflater.inflate(R.layout.activity_fragment, null);
+		LoaderSettings settings = new SettingsBuilder()
+	    	.withDisconnectOnEveryCall(true)
+	    	// 50 is the percentage of the available cache to be used
+	    	.withCacheManager(new LruBitmapCache(getActivity(), 50))
+	    	.withConnectionTimeout(20000)
+	    	.withReadTimeout(30000)
+	    	.build(getActivity());
+	    imageManager = new ImageManager(getActivity(), settings);
+	    return view;
+	}
+	
+	public static final ImageManager getImageManager() {
+	    return imageManager;
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		mThis = this;
-//		showProgressDialog();
+		prepareListView();
+		url = getArguments().getString(ARG_SUBREDDIT_URL) + ".json";
+		populateList(url);
+		getView().getRootView().setBackgroundColor(getResources().getColor(R.color.gnow_bg));
+		int spacing = (int)getResources().getDimension(R.dimen.spacing);
+	    int itemsPerRow = getResources().getInteger(R.integer.items_per_row);
+	    MultiItemRowListAdapter wrapperAdapter = new MultiItemRowListAdapter(getActivity(), postAdapter, itemsPerRow, spacing);
+	    setListAdapter(wrapperAdapter);
+		super.onActivityCreated(savedInstanceState);
+	}
+	
+	private void prepareListView() {
 		list = getListView();
+		errorLayout = (LinearLayout)getView().findViewById(R.id.error_layout);
+		checkConnectionAndShowError(list, errorLayout, null);
 		list.setDivider(null);
 		list.setDividerHeight(5);
 		list.setPadding(5, 5, 5, 20);
 		list.setClipToPadding(false);				// !important
 		list.setVerticalScrollBarEnabled(false);
-		getView().getRootView().setBackgroundColor(getResources().getColor(R.color.gnow_bg));
-		populateList();
-		int spacing = (int)getResources().getDimension(R.dimen.spacing);
-	    int itemsPerRow = getResources().getInteger(R.integer.items_per_row);
-	    MultiItemRowListAdapter wrapperAdapter = new MultiItemRowListAdapter(getActivity(), postAdapter, itemsPerRow, spacing);
-	    setListAdapter(wrapperAdapter);
-//		setListAdapter(postAdapter);
-		super.onActivityCreated(savedInstanceState);
 	}
 	
 	public static RedditFragment getThis() {
@@ -87,7 +116,6 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		url = getArguments().getString(ARG_SUBREDDIT_URL) + ".json";
 		// This is the View which is created by ListFragment
         ViewGroup viewGroup = (ViewGroup) view;
         // We need to create a PullToRefreshLayout manually
@@ -136,33 +164,21 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 	}
 	
 	public void reloadPosts() {
-//		setListAdapter(null);
-//		RedditAdapter.i = 0;
-//		populateList();
-//		setListAdapter(postAdapter);
+		if(checkConnectionAndShowCrouton()) {
+			setListAdapter(null);
+			populateList(url);
+			setListAdapter(postAdapter);
+		}
+//		checkConnectionAndShowError(list, errorLayout, null);
 	}
 	
-	private void showProgressDialog() {
-		progressStatus = 0;
-		loadingProgress = new ProgressDialog(getActivity());
-		loadingProgress.setCancelable(false);
-		loadingProgress.setMessage("Loading wallpapers...");
-		loadingProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		loadingProgress.setProgress(progressStatus);
-		loadingProgress.setMax(25);
-		loadingProgress.show();
-	}
-	
-	private void populateList() {
-//		url = getArguments().getString(ARG_SUBREDDIT_URL);
-//		url = url+".json";
-		Crouton.makeText(getActivity(), "Loading...", Style.INFO).show();
+	private void populateList(String urlToParse) {
 		mContext = getActivity();
 		reqQueue = Volley.newRequestQueue(getActivity());
 		itemArray = new ArrayList<RedditItem>();
 		postAdapter = new RedditAdapter(itemArray, getActivity());
 
-		JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET, url, null, 
+		JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET, urlToParse, null, 
 				new Response.Listener<JSONObject>() {
 
 					@Override
@@ -174,12 +190,11 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 
 			@Override
 			public void onErrorResponse(VolleyError arg0) {
-				//TODO LOL
+				showErrorCrouton(R.string.crouton_unexpected_error);
+				arg0.printStackTrace();
 			}
 		});
 		reqQueue.add(jsonReq);
-		
-		getListView().setOnItemClickListener(this);
 		
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
@@ -193,7 +208,8 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    itemArray.remove(postAdapter.getItem(position));
+//                                  itemArray.remove(postAdapter.getItem(position));
+//                                	Report post code!
                                 }
                                 postAdapter.notifyDataSetChanged();
                             }
@@ -212,57 +228,133 @@ public class RedditFragment extends SherlockListFragment implements OnRefreshLis
 				RedditItem item = new RedditItem();
 				item.title = (String) child.opt("title");
 				if(item.title != null) {
+					item.url = child.optString("url");
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-					item.nsfw = (Boolean) child.optBoolean("over_18");
-					if(!item.nsfw || prefs.getBoolean("nsfw_enabled", false)) {
-						item.url = child.optString("url");
+					// Checks if the image is NSFW *or* if NSFW is allowed. If one of them true, display that post.
+					if(!child.optBoolean("over_18") || prefs.getBoolean("nsfw_enabled", false)) {
+						item.author = child.optString("author");
 						item.points = child.optInt("score");
-						item.subreddit = child.optString("subreddit");
-						item.thumbnail = child.optString("thumbnail");
 		                itemArray.add(item);
+					}
+					else {
+//						itemArray.remove(item);
 					}
 				}
 				else {
 					//
 					break;
 				}
-				progressStatus++;
-//				loadingProgress.setProgress(progressStatus);
 			}
-//			loadingProgress.dismiss();
-
 		}
-		catch (JSONException e) {
+		catch (Exception e) {
+			showErrorCrouton(R.string.crouton_unexpected_error);
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Intent intent = new Intent(mContext, DetailView.class);
-		intent.putExtra(URL, itemArray.get(arg2).url);
-		startActivity(intent);		
-		
+	public void showInfoCrouton(int stringId) {
+		Crouton.makeText(getActivity(), getResources().getString(stringId), Style.INFO).show();
 	}
 	
-//	private void showCrouton() {
-//		LayoutInflater mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		View view = mInflater.inflate(R.layout.carddemo_extras_crouton_card, null);
-//		
-//		CardView cardView= (CardView)view.findViewById(R.id.carddemo_card_crouton_id);
-//		
-//		Card card = new Card(getActivity());
-//		card.setTitle("Crouton Card");
-//		card.setBackgroundResourceId(R.color.demoextra_card_background_color2);
-//		
-//		CardThumbnail thumb = new CardThumbnail(getActivity());
-//		thumb.setDrawableResource(R.drawable.ic_action_bulb);
-//		card.addCardThumbnail(thumb);
-//		
-//		cardView.setCard(card);
-//		
-//		final Crouton crouton;
-//		crouton = Crouton.make(getActivity(), view);
-//		crouton.show();
-//	}
+	public void showConfirmCrouton(int stringId) {
+		Crouton.makeText(getActivity(), getResources().getString(stringId), Style.CONFIRM).show();
+	}
+	
+	public void showErrorCrouton(int stringId) {
+		Crouton.makeText(getActivity(), getResources().getString(stringId), Style.ALERT).show();
+	}
+	
+	public void startDownload(String imageName, String imageUrl) {
+		if(checkConnectionAndShowCrouton()) {
+			if(imageUrl.lastIndexOf(".") != -1) {
+				showInfoCrouton(R.string.crouton_download);
+				DownloadManager mgr = (DownloadManager)getActivity().getSystemService(HomeActivity.DOWNLOAD_SERVICE);
+		        String filenameArray[] = imageUrl.split("\\.");
+		        String ext = filenameArray[filenameArray.length-1];
+		        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(imageUrl));
+				req.setTitle(getResources().getString(R.string.downloading_in_progress)).setDescription(imageName);
+				req.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Pony Wallpaper", imageName + "." + ext);
+				mgr.enqueue(req);
+			}
+			else {
+				showErrorCrouton(R.string.crouton_unexpected_error);
+			}
+		}	
+	}
+	
+	public int getPosForView(View v) {
+		return getListView().getPositionForView(v);
+	}
+	
+	private boolean checkConnectionAndShowCrouton() {
+		ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		if(activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting()) {
+			return true;
+		}
+		else {
+			showErrorCrouton(R.string.crouton_network_error);
+			return false;
+		}
+	}
+	
+	private boolean checkConnectionAndShowError(ListView listView, LinearLayout errorLayout, LinearLayout loadingLayout) {
+		ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		if(activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting()) {
+			listView.setVisibility(View.VISIBLE);
+			errorLayout.setVisibility(View.GONE);
+//			loadingLayout.setVisibility(View.GONE);
+			return true;
+		}
+		else {
+//			listView.setVisibility(View.GONE);
+			errorLayout.setVisibility(View.VISIBLE);
+//			loadingLayout.setVisibility(View.GONE);
+			return false;
+		}
+	}
+	
+	public void setWallpaper(final String imageUrl) {
+		if(checkConnectionAndShowCrouton()) {
+			showInfoCrouton(R.string.crouton_set_wallpaper);
+			try {
+				Thread thread = new Thread(new Runnable(){
+				    @Override
+				    public void run() {
+				        try {
+				        	WallpaperManager wpm = WallpaperManager.getInstance(getActivity().getApplicationContext());
+				    		InputStream ins;
+							ins = new URL(imageUrl).openStream();
+							wpm.setStream(ins);
+							showConfirmCrouton(R.string.crouton_set_wallpaper_success);
+				        }
+				        catch (Exception e) {
+				            showErrorCrouton(R.string.crouton_unexpected_error);
+				            e.printStackTrace();
+				        }
+				    }
+				});
+				thread.start();
+	
+			}
+			catch (Exception e) {
+				showErrorCrouton(R.string.crouton_unexpected_error);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void showAlertDialog(String title, String message, Drawable icon) {
+		new AlertDialog.Builder(getActivity().getApplicationContext())
+		    .setTitle(title)
+		    .setMessage(message)
+		    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            dialog.dismiss();
+		        }
+		    })
+		    .setIcon(icon)
+		    .show();
+	}
 }

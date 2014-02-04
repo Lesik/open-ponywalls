@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class SettingsActivity extends FragmentActivity {
 
@@ -132,15 +133,6 @@ public class SettingsActivity extends FragmentActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(getArguments().getInt(ARG_PREFERENCE_XML));
-		}
-		
-		void onTwitterClick() {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/printworkingdir"));
-			startActivity(browserIntent);
-		}
-		void onGithubClick() {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Lesik"));
-			startActivity(browserIntent);
 		}
 	}
 }

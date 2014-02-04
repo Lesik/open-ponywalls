@@ -1,10 +1,8 @@
 package com.lesikapk.ponywalls;
 
 public class RedditItem {
-	public String subreddit;
 	public String title;
-	public boolean nsfw;
+	public String author;
 	public int points;
 	public String url;
-	public String thumbnail;
 }

@@ -8,6 +8,7 @@
     
     <TextView
         android:id="@id/post_title"
+        android:text="@string/post_title_default"
         android:paddingLeft="@dimen/text_block_side_padding"
         android:paddingTop="@dimen/text_block_top_padding"
         android:paddingRight="@dimen/text_block_side_padding"

@@ -43,6 +43,18 @@
 			        android:data="https://github.com/JakeWharton/ActionBarSherlock" />
 		</PreferenceScreen>
 		<PreferenceScreen
+		     android:title="Volley"
+		     android:summary="by Google/The Android Open Source Project">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://android.googlesource.com/platform/frameworks/volley" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Android ImageLoader"
+		     android:summary="by Novoda">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/novoda/ImageLoader" />
+		</PreferenceScreen>
+		<PreferenceScreen
 		     android:title="Crouton"
 		     android:summary="by Benjamin Weiss (keyboardsurfer)">
 			<intent android:action="android.intent.action.VIEW"
@@ -90,5 +102,10 @@
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="http://stackoverflow.com/a/7062180/1801496" />
 		</PreferenceScreen>
+	</PreferenceCategory>
+	<PreferenceCategory 
+	    android:title="One last thing:">
+	    <Preference
+	        android:title="Koush and Kondik, fuck you!" />	    
 	</PreferenceCategory>
 </PreferenceScreen>

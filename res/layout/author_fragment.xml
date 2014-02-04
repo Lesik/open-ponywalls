@@ -52,7 +52,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             
             
-            <ImageView
+            <!--ImageView
                 android:id="@+id/twitter_button"
                 android:contentDescription="twitter icon"
                 android:layout_width="wrap_content"
@@ -60,11 +60,11 @@
                 android:layout_marginLeft="8dip"
                 android:onClick="onTwitterClick"
                 android:scaleType="centerInside"
-                android:src="@drawable/twitter_birdy" />
+                android:src="@drawable/twitter_birdy" /-->
 
         </LinearLayout>
         
-        <ImageView
+        <!--ImageView
             android:id="@+id/github_button"
             android:contentDescription="github icon"
             android:layout_width="wrap_content"
@@ -75,6 +75,6 @@
             android:layout_alignParentRight="true"
             android:onClick="onGithubClick"
             android:scaleType="centerInside"
-            android:src="@drawable/github" />
+            android:src="@drawable/github" /-->
     </RelativeLayout>
 </LinearLayout>

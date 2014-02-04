@@ -6,124 +6,129 @@
     android:background="@drawable/card_bg"
     android:orientation="vertical" >
 
-	<LinearLayout android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-    
-   	    <include layout="@layout/card_title_with_menu" />
-	    
-	    <TextView
-	        android:id="@id/calendar_event_subtitle"
-	        android:paddingLeft="@dimen/card_padding"
-	        android:paddingRight="@dimen/card_padding"
-	        android:paddingBottom="16.0dip"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/google_calendar_event"
-	        style="@style/CardText" />
-	    <TextView
-	        android:id="@+id/mycard_time"
-	        android:paddingLeft="@dimen/card_padding"
-	        android:paddingRight="@dimen/card_padding"
-	        android:paddingBottom="16.0dip"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        style="@style/CardText" />
-	
-	    <LinearLayout
-	        android:id="@id/event_location_section"
-	        android:orientation="horizontal"
-	        style="@style/CalendarEventCardTextBlock"
-	        android:visibility="visible" >
-	
-	        <TextView
-	            android:id="@+id/votes_prefix"
-	            style="@style/CardLightText"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content" />
+	<include layout="@layout/card_post_title" />
 
-	        <TextView
-	            android:id="@+id/votes"
-	            style="@style/CardText"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/post_votes_count" />
-	        
-	    </LinearLayout>
-	    <LinearLayout
-	        android:id="@id/card_tagline"
-	        style="@style/CalendarEventCardTextBlock">
-	        <TextView
-	            android:id="@+id/mycard_points"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="@string/calendar_name_label"
-	            style="@style/CardLightText" />
-	        <TextView android:id="@id/calendar_name"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            style="@style/CardText" />
-	    </LinearLayout>
-	    <LinearLayout
-	        android:id="@id/event_description_section"
-	        style="@style/CalendarEventCardTextBlock">
-	        <TextView
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="@string/description_label"
-	            style="@style/CardLightText" />
-	        <TextView
-	            android:id="@id/event_description"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            style="@style/CardText" />
-	
-	    </LinearLayout>
-	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal" >
-	
-	        <com.lesikapk.ponywalls.ResizableImageView
-	            android:id="@+id/imageView1"
-	            android:layout_width="fill_parent"
-	            android:layout_height="200dp"
-	            android:layout_gravity="center_horizontal"
-	            android:scaleType="centerCrop"
-	            android:src="@drawable/spinner_holo" />
-	
-	    </LinearLayout>
-	
-	    <LinearLayout
-	        android:id="@id/event_guests_section"
-	        style="@style/CalendarEventCardTextBlock">
-	        <TextView
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="@string/guests_label"
-	            style="@style/CardLightText" />
-	        <LinearLayout
-	            android:orientation="vertical"
-	            android:id="@id/event_guests"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content" />
-	    </LinearLayout>
-	    
-	    <Button
-	        android:id="@+id/download_button"
-	        android:visibility="visible"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/btn_download"
-	        android:drawableStart="@drawable/ic_action_download"
-	        style="@style/CardActionButtonWithIconNoTopDivider" />
-	    
-	    <Button android:id="@id/view_in_calendar_button"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/view_in_calendar"
-	        android:drawableStart="@drawable/ic_action_event"
-	        style="@style/CardActionButtonWithIcon" />
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+		android:layout_marginBottom="16.0dip"
+        android:layout_marginLeft="@dimen/card_padding"
+        android:layout_marginRight="@dimen/card_padding">
+        
+		<TextView
+		    android:id="@id/post_nsfw"
+		    style="@style/CardTextRed"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical"
+		    android:padding="3dp"
+		    android:text="@string/post_nsfw" />
+        
+        <TextView
+            android:id="@id/post_author"
+            style="@style/CardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/card_padding_nodivider2"
+            android:paddingRight="@dimen/card_padding"
+            android:text="@string/post_author_default" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@id/event_location_section"
+        android:orientation="horizontal"
+        style="@style/CalendarEventCardTextBlock"
+        android:visibility="visible" >
+
+        <TextView
+            android:id="@+id/votes_prefix"
+            style="@style/CardLightText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/votes"
+            style="@style/CardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/post_votes_count" />
+        
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/card_tagline"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:id="@+id/mycard_points"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calendar_name_label"
+            style="@style/CardLightText" />
+        <TextView android:id="@id/calendar_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/CardText" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/event_description_section"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description_label"
+            style="@style/CardLightText" />
+        <TextView
+            android:id="@id/event_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/CardText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <com.lesikapk.ponywalls.ResizableImageView
+            android:id="@id/post_image"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            android:src="@drawable/spinner_holo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/event_guests_section"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/guests_label"
+            style="@style/CardLightText" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@id/event_guests"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    
+    <Button
+        android:id="@id/download_button"
+        android:visibility="visible"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_download"
+        android:drawableLeft="@drawable/ic_action_download"
+        style="@style/CardActionButtonWithIconNoTopDivider" />
+    
+    <Button android:id="@id/set_wallpaper_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_set_wallpaper"
+        android:drawableLeft="@drawable/ic_action_set_wallpaper"
+        style="@style/CardActionButtonWithIcon" />
 </LinearLayout>

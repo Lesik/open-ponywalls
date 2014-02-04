@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="post_title" />
+	<item type="id" name="post_author" />
+	<item type="id" name="post_image" />
+	<item type="id" name="post_nsfw" />
+	<item type="id" name="download_button" />
+	<item type="id" name="set_wallpaper_button"></item>
+	<item type="id" name="error_title"></item>
+	<item type="id" name="error_descr"></item>
+	<item type="id" name="error_image"></item>
+	<item type="id" name="error_layout"></item>
+	<item type="id" name="retry_button"></item>
+</resources>

@@ -5,10 +5,12 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="17"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
-	<uses-permission
-	    android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.SET_WALLPAPER" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -25,7 +27,7 @@
         </activity>
         <activity
             android:name="com.lesikapk.ponywalls.SettingsActivity"
-            android:label="@string/settings" >
+            android:label="@string/tab_settings" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
