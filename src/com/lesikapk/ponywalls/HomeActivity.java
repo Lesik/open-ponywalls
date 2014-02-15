@@ -1,19 +1,17 @@
 package com.lesikapk.ponywalls;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-
-
-public class HomeActivity extends SherlockFragmentActivity implements
-		ActionBar.OnNavigationListener {
+public class HomeActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -22,14 +20,21 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private String subreddit = "http://www.reddit.com/r/ponywalls/";
 	private String url;
+	private Utils utils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Set up utils
+		utils = new Utils();
+		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
+		
+		// Inflate layout
 		setContentView(R.layout.activity_home);
 
 		// Set up the action bar to show a dropdown list.
-		final ActionBar actionBar = getSupportActionBar();
+		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -45,6 +50,7 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current dropdown position.
+		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
 			getActionBar().setSelectedNavigationItem(
 					savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
@@ -54,10 +60,15 @@ public class HomeActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// Serialize the current dropdown position.
-		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
-				.getSelectedNavigationIndex());
+		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar().getSelectedNavigationIndex());
 	}
 
+	@Override
+	protected void onResume() {
+		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
+		super.onResume();
+	}
+	
 	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
@@ -85,18 +96,20 @@ public class HomeActivity extends SherlockFragmentActivity implements
 			url = null;
 			break;
 		}
-		SherlockListFragment fragment = new RedditFragment();
+		Fragment fragment = new RedditFragment();
 		Bundle args = new Bundle();
 		args.putString(RedditFragment.ARG_SUBREDDIT_URL, url);
 		fragment.setArguments(args);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment).commit();
+		getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 		return true;
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.home, menu);
+		getMenuInflater().inflate(R.menu.home, menu);
+//		Some stuff for the search thingy I might implement some day (but this day is not today)
+//	    MenuItem searchItem = menu.findItem(R.id.action_search);
+//	    SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		return super.onCreateOptionsMenu(menu);
 	}
 	

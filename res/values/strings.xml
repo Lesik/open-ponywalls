@@ -3,13 +3,17 @@
 
     <string name="app_name">PonyWalls</string>
 	<string name="app_author_name">Lesik Pidgornyy (Developer)</string>
-	<string name="action_reload">Reload</string>
+	<string name="action_search">Search</string>
+    <string name="action_reload">Reload</string>
     <string name="action_settings">Settings</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_help">Help</string>
+    <string name="tab_changelog">Changelog</string>
     <string name="tab_author">About</string>
     <string name="title_section3">Section 3</string>
     <string name="downloading_in_progress">Downloading wallpaper</string>
+    
+    <!-- Crouton -->
     <string name="crouton_download">Downloading wallpaper&#8230;</string>
     <string name="crouton_network_error">Network error!</string>
     <string name="crouton_set_wallpaper">Setting picture as wallpaper&#8230;</string>
@@ -17,14 +21,14 @@
     
     <string name="crouton_unexpected_error">An unexpected error occurred!</string>
     
-    <string name="error_title">No connection!</string>
-    <string name="error_descr">Unfortunately, we couldn\'t connect to radiobrony.fr. This could have a lot of possible reasons.
-        \nIn case it\'s your fault, please check your connection and try again.</string>
-    <string name="error_descr_dialog">We just checked - you still aren\'t connected to the internet!
-        \nThe reason could be one of the following:
-        \n- radiobrony.fr is currently down or busy
-        \n- you are not connected to the internet
-        \n- you access the internet via a bad or not configured proxy</string>
+    <string name="error_title">Connection error</string>
+    <string name="error_descr">There was a problem connecting to the server. Please check your connection and try again. Click this to get more information.</string>
+    <string name="error_descr_dialog">There was a problem connecting to the server.
+        \nPlease check your connection and try again.
+        \n
+        \nThis is the error message (in case you\'re interested):
+        \n
+        \n</string>
     <string name="btn_retry">Retry</string>
     
     <string name="alert_send_report_title">Send error report</string>
@@ -39,7 +43,7 @@
 	<string name="download_not_possible_title">An unexpected error occurred</string>
 	<string name="download_not_possible_message">Most likely there\'s something wrong with the post or its image link.</string>
 	
-    <string name="btn_download">Download image</string>
+    <string name="btn_download">Download</string>
     <string name="btn_set_wallpaper">Set as wallpaper</string>
     <string name="post_title_default">Unknown post</string>
     <string name="post_author_prefix">by</string>
@@ -55,4 +59,28 @@
     <string name="guests_label">Guests</string>
     <string name="accessibility_menu_button">Card menu</string>
     
+    <!-- Settings -->
+    <string name="nothing_selected">Not set</string>
+    
+    <string name="settings_nsfw_title">Show NSFW artwort</string>
+    <string name="settings_nsfw_summaryon">NSFW content shown</string>
+    <string name="settings_nsfw_summaryoff">NSFW content hidden</string>
+    
+    <string name="settings_theme_title">Application theme</string>
+    <string name="settings_theme_summary">In case you like it dark</string>
+    
+    <string name="settings_category_ui">User interface</string>
+    
+    <string name="settings_ui_portrait_columns">Portrait columns</string>
+    <string name="settings_ui_portrait_columns_summary">Multiple columns in portrait mode might look odd on phones</string>
+    <string name="settings_ui_landscape_columns">Landscape columns</string>
+    <string name="settings_ui_landscape_columns_summary">A value between two and three is suggested</string>
+    
+    <string name="setting_theme_holo_red_name">Holo Red</string>
+    <string name="setting_theme_holo_dark_name">Holo Dark</string>
+    <string name="setting_theme_holo_green_name">Holo Green</string>
+    <string name="setting_theme_holo_blue_name">Holo Blue</string>
+    <string name="setting_theme_holo_lightblue_name">Holo Light Blue</string>
+    <string name="setting_theme_holo_orange_name">Holo Orange</string>
+    <string name="setting_theme_holo_light_darkactionbar_name">Holo Light with dark ActionBar</string>
 </resources>

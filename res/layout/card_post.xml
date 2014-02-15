@@ -11,18 +11,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
-		android:layout_marginBottom="16.0dip"
+        android:layout_marginBottom="4.0dip"
         android:layout_marginLeft="@dimen/card_padding"
-        android:layout_marginRight="@dimen/card_padding">
+        android:layout_marginRight="@dimen/card_padding" >
         
-		<TextView
+        <!-- Could get the NSFW tag to work - disabling -->
+		<!--TextView
 		    android:id="@id/post_nsfw"
 		    style="@style/CardTextRed"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="center_vertical"
 		    android:padding="3dp"
-		    android:text="@string/post_nsfw" />
+		    android:text="@string/post_nsfw" /-->
         
         <TextView
             android:id="@id/post_author"
@@ -44,6 +45,7 @@
 
         <TextView
             android:id="@+id/votes_prefix"
+            android:text="@string/post_votes_prefix"
             style="@style/CardLightText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -96,7 +98,7 @@
             android:layout_width="fill_parent"
             android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="centerCrop"
+            android:scaleType="center"
             android:src="@drawable/spinner_holo" />
 
     </LinearLayout>
@@ -115,20 +117,50 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    
-    <Button
-        android:id="@id/download_button"
-        android:visibility="visible"
-        android:layout_width="fill_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_download"
-        android:drawableLeft="@drawable/ic_action_download"
-        style="@style/CardActionButtonWithIconNoTopDivider" />
-    
-    <Button android:id="@id/set_wallpaper_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_set_wallpaper"
-        android:drawableLeft="@drawable/ic_action_set_wallpaper"
-        style="@style/CardActionButtonWithIcon" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@id/download_button"
+            style="@style/CardActionButtonWithIconNoTopDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="50"
+            android:drawableLeft="@drawable/ic_action_download_holo_light"
+            android:ellipsize="end"
+            android:text="@string/btn_download"
+            android:visibility="visible" />
+
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/set_wallpaper_button"
+            style="@style/CardActionButtonWithIconNoTopDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_wallpaper_holo_light" />
+        
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/share_button"
+            style="@style/CardActionButtonWithIconNoTopDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_share_holo_light" />
+
+    </LinearLayout>
+    <!-- android:drawableLeft="@drawable/ic_action_set_wallpaper" -->
 </LinearLayout>

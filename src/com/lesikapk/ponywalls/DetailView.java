@@ -25,7 +25,7 @@ public class DetailView extends Activity{
 		Bundle data = getIntent().getExtras();
 		setContentView(R.layout.webview);
 		if(data != null) {
-			url = data.getString(RedditFragment.URL);
+			url = data.getString(RedditFragment.getThis().url);
 			webView = (WebView) findViewById(R.id.webview);
 			webView.getSettings().setJavaScriptEnabled(true);
 			webView.getSettings().setBuiltInZoomControls(true);

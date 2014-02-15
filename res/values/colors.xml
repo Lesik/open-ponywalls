@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="gnow_bg">#e5e5e5</color>
+    <color name="activity_bg">#ffeeeeee</color>
+    
+    <color name="holo_dark">#ff343434</color>
+    <color name="holo_light">#ffffffff</color>
+    
+    <color name="transparent">#00000000</color>
+    
+    <color name="red_error">#cc0000</color>
+    
+    <!-- Theme colors -->
+    <color name="theme_holo_red">#A60000</color>
+    <color name="theme_holo_dark">#222222</color>
+    <color name="theme_holo_green">#268E00</color>
+    <color name="theme_holo_blue">#06456A</color>
+    <color name="theme_holo_lightblue">#33B5E5</color>
+    <color name="theme_holo_orange">#DD5500</color>
+    <color name="theme_holo_light_darkactionbar">#222222</color>
 </resources>

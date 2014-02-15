@@ -4,8 +4,9 @@
 	<PreferenceCategory
             android:title="Author">
 		<Preference
-		    android:layout="@layout/author_fragment"
-		    android:key="author_fragment" />
+		    android:layout="@layout/author_image"
+		    android:key="author_fragment"
+		    android:selectable="false" />
 	</PreferenceCategory>
 	<PreferenceCategory
 	    android:title="About">
@@ -21,6 +22,12 @@
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/kanavg/RedditReader" />
 		</PreferenceScreen>
+		<PreferenceScreen
+			android:title="Heavily inspired by RedReader"
+			android:summary="by QuantumBadger (dude you rock!)">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/QuantumBadger/RedReader" />
+		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:title="Libraries">
@@ -35,12 +42,6 @@
 		     android:summary="by Umano/SoThree, Inc.">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/umano/MultiItemRowListAdapter" />
-		</PreferenceScreen>
-		<PreferenceScreen
-		     android:title="ActionBarSherlock"
-		     android:summary="by Jake Wharton">
-			<intent android:action="android.intent.action.VIEW"
-			        android:data="https://github.com/JakeWharton/ActionBarSherlock" />
 		</PreferenceScreen>
 		<PreferenceScreen
 		     android:title="Volley"
@@ -59,6 +60,18 @@
 		     android:summary="by Benjamin Weiss (keyboardsurfer)">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/keyboardsurfer/Crouton" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="SmoothProgressBar"
+		     android:summary="by Antoine Merle (castorflex)">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/castorflex/SmoothProgressBar" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="ChangeLog Library"
+		     android:summary="by Gabriele Mariotti">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="https://github.com/gabrielemariotti/changeloglib" />
 		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
@@ -85,27 +98,28 @@
 	<PreferenceCategory
 		android:title="The developer would like to thank:">
 		<PreferenceScreen
-		     android:title="Stack Overflow answer: clipToPadding"
-		     android:summary="by Gunnar Karlsson">
+		     android:title="Gunnar Karlsson"
+		     android:summary="Stack Overflow answer: clipToPadding">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="http://stackoverflow.com/a/14459179/1801496" />
 		</PreferenceScreen>
 		<PreferenceScreen
-		     android:title="Stack Overflow answer: SherlockActionBar"
-		     android:summary="by Smitty">
-			<intent android:action="android.intent.action.VIEW"
-			        android:data="http://stackoverflow.com/a/12889256/1801496" />
-		</PreferenceScreen>
-		<PreferenceScreen
-		     android:title="Stack Overflow answer: Hide ListView scrollbar"
-		     android:summary="by Igor Khrupin (ihrupin)">
+		     android:title="Igor Khrupin (ihrupin)"
+		     android:summary="Stack Overflow answer: Hide ListView scrollbar">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="http://stackoverflow.com/a/7062180/1801496" />
 		</PreferenceScreen>
-	</PreferenceCategory>
-	<PreferenceCategory 
-	    android:title="One last thing:">
-	    <Preference
-	        android:title="Koush and Kondik, fuck you!" />	    
+		<PreferenceScreen
+		     android:title="Rahul"
+		     android:summary="Stack Overflow answer: ListView addFooterView">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/10258514/1801496" />
+		</PreferenceScreen>
+		<PreferenceScreen
+		     android:title="Eugene Mymrin"
+		     android:summary="Stack Overflow answer: The best way to save GridView position">
+			<intent android:action="android.intent.action.VIEW"
+			        android:data="http://stackoverflow.com/a/5688490/1801496" />
+		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>

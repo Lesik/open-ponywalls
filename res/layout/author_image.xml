@@ -4,9 +4,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="15dip"
-    android:paddingRight="15dip" >
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/author_badge"
@@ -14,8 +12,7 @@
         android:layout_height="240dip"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" >
+	    android:padding="10dp" >
 
         <ImageView
             android:id="@+id/photo"

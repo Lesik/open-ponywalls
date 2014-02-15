@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <CheckBoxPreference 
-        android:summaryOn="NSFW content shown"
-        android:summaryOff="NSFW content hidden"
+        android:title="@string/settings_nsfw_title"
         android:key="nsfw_enabled"
-        android:title="Show NSFW artwort"
+        android:summaryOn="@string/settings_nsfw_summaryon"
+        android:summaryOff="@string/settings_nsfw_summaryoff"
         android:defaultValue="false" />
+    
+    <ListPreference
+        android:title="@string/settings_theme_title"
+        android:key="theme"
+        android:summary="@string/settings_theme_summary"
+        android:entries="@array/settings_theme_names"
+        android:entryValues="@array/settings_theme_values" />
+    
+    <PreferenceCategory 
+        android:title="@string/settings_category_ui">
+        
+		<ListPreference
+		    android:title="@string/settings_ui_portrait_columns"
+	        android:key="columns_portrait"
+	        android:summary="@string/settings_theme_summary"
+	        android:entries="@array/settings_ui_columns"
+	        android:entryValues="@array/settings_ui_columns" />
+		
+		<ListPreference
+	        android:title="@string/settings_ui_landscape_columns"
+	        android:key="columns_landscape"
+	        android:summary="@string/settings_theme_summary"
+	        android:entries="@array/settings_ui_columns"
+	        android:entryValues="@array/settings_ui_columns" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -3,17 +3,23 @@ package com.lesikapk.ponywalls;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 public class SettingsActivity extends FragmentActivity {
 
@@ -35,10 +41,18 @@ public class SettingsActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Load Utils
+		Utils utils = new Utils();
+		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
+		
 		getWindow().setWindowAnimations(0);
 		setContentView(R.layout.activity_settings);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		PagerTitleStrip tabs = (PagerTitleStrip)findViewById(R.id.pager_title_strip);
+		tabs.setBackgroundColor(getResources().getColor(R.color.gray));
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
@@ -70,34 +84,56 @@ public class SettingsActivity extends FragmentActivity {
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
 	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
 		@Override
-		public SettingsFragment getItem(int position) {
-			int xml = 0;
-			switch (position) {
-				case 0: xml = R.xml.preferences;
-					break;
-				case 1: xml = R.xml.author;
-					break;
-				default: xml = R.xml.author;
-					break;
+		public Fragment getItem(int position) {
+			int xml;
+			
+			if(position < 2) {
+				switch (position) {
+					case 0: xml = R.xml.preferences;
+						break;
+					case 1: xml = R.xml.author;
+						break;
+					default: xml = R.xml.author;
+						break;
+				}
+				SettingsFragment fragment = new SettingsFragment();
+				Bundle args = new Bundle();
+				args.putInt(SettingsFragment.ARG_PREFERENCE_XML, xml);
+				args.putInt(SettingsFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment.setArguments(args);
+				return fragment;
 			}
-			SettingsFragment fragment = new SettingsFragment();
-			Bundle args = new Bundle();
-			args.putInt(SettingsFragment.ARG_PREFERENCE_XML, xml);
-			args.putInt(SettingsFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);
-			return fragment;
+			else {
+				switch (position) {
+					case 2:
+						xml = R.layout.changelog;
+						break;
+					case 3:
+						xml = R.layout.changelog;
+						break;
+					default:
+						xml = R.layout.changelog;
+						break;
+				}
+				Fragment fragment = new OtherFragment();
+				Bundle args = new Bundle();
+				args.putInt(OtherFragment.ARG_LAYOUT_XML, xml);
+				args.putInt(OtherFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment.setArguments(args);
+				return fragment;
+			}
 		}
 
 		@Override
 		public int getCount() {
-			return 2;
+			return 4;
 		}
 
 		@Override
@@ -108,6 +144,10 @@ public class SettingsActivity extends FragmentActivity {
 				return getString(R.string.tab_settings).toUpperCase(l);
 			case 1:
 				return getString(R.string.tab_author).toUpperCase(l);
+			case 2:
+				return getString(R.string.tab_changelog).toUpperCase(l);
+			case 3:
+				return getString(R.string.tab_help).toUpperCase(l);
 			}
 			return null;
 		}
@@ -133,6 +173,42 @@ public class SettingsActivity extends FragmentActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(getArguments().getInt(ARG_PREFERENCE_XML));
+			
+			// Only set all this stuff, if the selected tab is the preferences tab
+			// Could also be done by the tab number, which is passed to this Fragment, but meh :)
+			if(getArguments().getInt(ARG_PREFERENCE_XML) == R.xml.preferences) {
+				// Set onThemeChangedListener
+				final ListPreference themePreference = (ListPreference)findPreference("theme");
+				themePreference.setSummary(themePreference.getEntry());
+				
+				themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						themePreference.setSummary(newValue.toString());
+						Utils utils = new Utils();
+						utils.loadThemeWithId(getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString());
+						return true;
+					}
+				});
+			}
+		}
+	}
+	
+	public static class OtherFragment extends Fragment {
+		/**
+		 * The fragment argument representing the section number for this
+		 * fragment.
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+		public static final String ARG_LAYOUT_XML = "layout_xml"; 
+
+		public OtherFragment() {
+			
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			View view = inflater.inflate(getArguments().getInt(ARG_LAYOUT_XML), container, false);
+			return view;
 		}
 	}
 }

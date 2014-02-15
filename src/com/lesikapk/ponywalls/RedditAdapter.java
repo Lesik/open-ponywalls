@@ -9,8 +9,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.imageloader.core.model.ImageTag;
@@ -22,7 +22,8 @@ public class RedditAdapter extends BaseAdapter {
 	private Context mContext;
 	private TextView votesPrefix;
 	private Button downloadButton;
-	private Button setWallpaperButton;
+	private ImageButton setWallpaperButton;
+	private ImageButton shareButton;
 	public static int i = 0;
 	
 	public static class ViewHolder {
@@ -54,7 +55,7 @@ public class RedditAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int index, View convertView, ViewGroup arg2) {
-        // Initialize some stuff
+		// Initialize some stuff
 		ViewHolder holder = null;
 		ImageTagFactory imageTagFactory = ImageTagFactory.newInstance(mContext, R.drawable.spinner);
 		imageTagFactory.setDefaultImageResId(R.drawable.spinner);
@@ -63,14 +64,15 @@ public class RedditAdapter extends BaseAdapter {
         	convertView = LayoutInflater.from(mContext).inflate(R.layout.card_post, null);
         	
         	holder = new ViewHolder();
-            holder.title 			= (TextView)convertView.findViewById(R.id.post_title);
-            holder.author 			= (TextView)convertView.findViewById(R.id.post_author);
-            holder.points 			= (TextView)convertView.findViewById(R.id.votes);
-        	holder.image			= (ImageView)convertView.findViewById(R.id.post_image);
+            holder.title 			= (TextView)	convertView.findViewById(R.id.post_title);
+            holder.author 			= (TextView)	convertView.findViewById(R.id.post_author);
+            holder.points 			= (TextView)	convertView.findViewById(R.id.votes);
+        	holder.image			= (ImageView)	convertView.findViewById(R.id.post_image);
         	
-            votesPrefix 			= (TextView)convertView.findViewById(R.id.votes_prefix);
-        	downloadButton 			= (Button)convertView.findViewById(R.id.download_button);
-            setWallpaperButton 		= (Button)convertView.findViewById(R.id.set_wallpaper_button);
+            votesPrefix 			= (TextView)	convertView.findViewById(R.id.votes_prefix);
+        	downloadButton 			= (Button)		convertView.findViewById(R.id.download_button);
+            setWallpaperButton 		= (ImageButton)	convertView.findViewById(R.id.set_wallpaper_button);
+            shareButton				= (ImageButton)	convertView.findViewById(R.id.share_button);
             
             convertView.setTag(holder);
         }
@@ -93,6 +95,7 @@ public class RedditAdapter extends BaseAdapter {
         if(list.get(index).url != null) {
 	        ImageTag tag = imageTagFactory.build(list.get(index).url, mContext);
 	        ((ImageView) holder.image).setTag(tag);
+	        holder.image.setScaleType(ImageView.ScaleType.CENTER_CROP);
 	        RedditFragment.getImageManager().getLoader().load(holder.image);
         }
         setListeners();
@@ -106,7 +109,7 @@ public class RedditAdapter extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				RedditFragment.getThis().startDownload( list.get(currentInstance.getPosForView(v)).title, list.get(currentInstance.getPosForView(v)).url);
+				RedditFragment.getThis().startDownload(list.get(currentInstance.getPosForView(v)).title, list.get(currentInstance.getPosForView(v)).url);
 			}
 		});
 		
@@ -115,6 +118,15 @@ public class RedditAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				RedditFragment.getThis().setWallpaper(list.get(currentInstance.getPosForView(v)).url);
+			}
+		});
+        
+        shareButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				RedditFragment.getThis().shareWallpaper(list.get(currentInstance.getPosForView(v)).url);
+				
 			}
 		});
 	}

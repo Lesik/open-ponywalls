@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="false">
+    
+    <changelogversion versionName="1.0" changeDate="Not out yet">
+        <changelogtext>First stable release</changelogtext>
+        <changelogtext>Basic JSON download and parsing functionality</changelogtext>
+		<changelogtext>Basic ListView functionality</changelogtext>
+		<changelogtext>Multiple categories ("hot"/"new"...)</changelogtext>
+		<changelogtext>Download functionality</changelogtext>
+		<changelogtext>Set-as-wallpaper functionality</changelogtext>
+		<changelogtext>Design similar to Google Now</changelogtext>
+		<changelogtext>SmoothProgressBar on loading</changelogtext>
+		<changelogtext>Settings page</changelogtext>
+		<changelogtext>About page</changelogtext>
+		<changelogtext>New setting: Show NSFW posts</changelogtext>
+		<changelogtext>Dropped support for Android lower 3.0</changelogtext>
+		<changelogtext>New setting: Application theme and color scheme</changelogtext>
+	</changelogversion>
+    
+</changelog>
