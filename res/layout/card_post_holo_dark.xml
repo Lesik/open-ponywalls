@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/card_bg"
+    android:background="@drawable/card_bg_holo_dark"
     android:orientation="vertical" >
 
 	<include layout="@layout/card_post_title" />
@@ -31,14 +31,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/card_padding_nodivider2"
-            android:paddingRight="@dimen/card_padding"
             android:text="@string/post_author_default" />
         
     </LinearLayout>
     
     <LinearLayout
-        android:id="@id/event_location_section"
         android:orientation="horizontal"
         style="@style/CalendarEventCardTextBlock"
         android:visibility="visible" >
@@ -125,12 +122,12 @@
 
         <Button
             android:id="@id/download_button"
-            style="@style/CardActionButtonWithIconNoTopDivider"
+            style="@style/CardActionButtonWithIconNoTopDividerHoloLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="50"
-            android:drawableLeft="@drawable/ic_action_download_holo_light"
+            android:drawableLeft="@drawable/ic_action_download_holo_dark"
             android:ellipsize="end"
             android:text="@string/btn_download"
             android:visibility="visible" />
@@ -142,11 +139,11 @@
         
         <ImageButton
             android:id="@id/set_wallpaper_button"
-            style="@style/CardActionButtonWithIconNoTopDivider"
+            style="@style/CardActionButtonWithIconNoTopDividerHoloDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_wallpaper_holo_light" />
+            android:src="@drawable/ic_action_wallpaper_holo_dark" />
         
         <View
 		    android:layout_width="1dp"
@@ -159,7 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_share_holo_light" />
+            android:src="@drawable/ic_action_share_holo_dark" />
 
     </LinearLayout>
     <!-- android:drawableLeft="@drawable/ic_action_set_wallpaper" -->

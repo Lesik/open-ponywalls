@@ -39,6 +39,8 @@
         \n
         \nSend email to developer?</string>
     
+    <!-- Dialogs -->
+    <string name="dialog_share_via">Share via</string>
     
 	<string name="download_not_possible_title">An unexpected error occurred</string>
 	<string name="download_not_possible_message">Most likely there\'s something wrong with the post or its image link.</string>
@@ -62,9 +64,13 @@
     <!-- Settings -->
     <string name="nothing_selected">Not set</string>
     
-    <string name="settings_nsfw_title">Show NSFW artwort</string>
+    <string name="settings_nsfw_title">Show NSFW artwork</string>
     <string name="settings_nsfw_summaryon">NSFW content shown</string>
     <string name="settings_nsfw_summaryoff">NSFW content hidden</string>
+    
+    <string name="settings_dark_mode_title">Use dark UI</string>
+    <string name="settings_dark_mode_summaryon">Everything is dark now</string>
+    <string name="settings_dark_mode_summaryoff">In case you like it dark</string>
     
     <string name="settings_theme_title">Application theme</string>
     <string name="settings_theme_summary">In case you like it dark</string>

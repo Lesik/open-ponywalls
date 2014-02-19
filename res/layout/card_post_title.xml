@@ -14,13 +14,19 @@
         android:paddingRight="@dimen/text_block_side_padding"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
+        android:layout_marginRight="20dp"
+		android:textAlignment="viewStart"
         android:paddingStart="@dimen/text_block_side_padding"
         android:paddingEnd="@dimen/text_block_side_padding"
         style="@style/CardTitle" />
     
-    <include
-        android:layout_gravity="end|top|center"
-        layout="@layout/card_menu_button"
-        android:visibility="gone" />
+    <ImageButton
+		android:layout_gravity="end|top|center"
+		android:id="@id/threedot_button"
+		android:visibility="visible"
+		android:layout_width="@dimen/card_action_button_height"
+		android:layout_height="@dimen/card_action_button_height"
+		android:contentDescription="@string/accessibility_menu_button"
+		style="@style/CardMenuButton" />
+    
 </FrameLayout>

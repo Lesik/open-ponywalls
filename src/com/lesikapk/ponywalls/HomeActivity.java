@@ -1,15 +1,20 @@
 package com.lesikapk.ponywalls;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.DocumentsContract.Root;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItemCompat;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.SearchView;
+import android.widget.ImageView;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 
@@ -18,33 +23,72 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	 * current dropdown position.
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
-	private String subreddit = "http://www.reddit.com/r/ponywalls/";
+	private static HomeActivity currentInstance;
+	private String subreddit = "http://www.reddit.com/r/all/";
 	private String url;
-	private Utils utils;
-
+	private ThemeUtils utils;
+	private MenuItem refreshItem;
+	private ImageView refreshImage;
+	private Animation animationRotate;
+	
+	public static HomeActivity getThis() {
+		return currentInstance;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+//		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+//		setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		
 		// Set up utils
-		utils = new Utils();
+		utils = new ThemeUtils();
 		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
+		currentInstance = this;
 		
-		// Inflate layout
-		setContentView(R.layout.activity_home);
-
-		// Set up the action bar to show a dropdown list.
+		// Set up the action bar to show a dropdown list
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
+		
+		// Inflate layout
+		setContentView(R.layout.activity_home);
+		
 		// Set up the dropdown list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
 		// Specify a SpinnerAdapter to populate the dropdown list.
 				new ArrayAdapter<String>(actionBar.getThemedContext(),
 						android.R.layout.simple_list_item_1,
 						android.R.id.text1, getResources().getStringArray(R.array.tab_names)), this);
+		// Set up animations
+		animationRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+		animationRotate.setRepeatCount(Animation.INFINITE);
+		animationRotate.setFillAfter(true);
+		animationRotate.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+				System.err.println("STARTED!");
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				if(!RedditFragment.getThis().isCurrentlyLoading()) {
+					refreshItem.getActionView().clearAnimation();
+					refreshItem.setActionView(null);
+				}
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				
+			}
+		});
+		// Inflate ImageView
+		LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		refreshImage = (ImageView)inflater.inflate(R.layout.actionbar_indeterminate_progress, null);
+		
 	}
 
 	@Override
@@ -101,12 +145,20 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		args.putString(RedditFragment.ARG_SUBREDDIT_URL, url);
 		fragment.setArguments(args);
 		getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+
+		if(refreshItem != null) {
+			// To make it not spin on category change (new -> hot)
+			refreshItem.setActionView(null);
+		}
+
 		return true;
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.home, menu);
+		refreshItem = menu.findItem(R.id.action_reload);
+		
 //		Some stuff for the search thingy I might implement some day (but this day is not today)
 //	    MenuItem searchItem = menu.findItem(R.id.action_search);
 //	    SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -116,13 +168,19 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			startActivity(new Intent(getBaseContext(),SettingsActivity.class));
-		case R.id.action_reload:
-			RedditFragment.getThis().reloadPosts();
-		default:
-			// Nothing happens :)
+			case R.id.action_settings:
+				startActivity(new Intent(getBaseContext(),SettingsActivity.class));
+			case R.id.action_reload:
+				RedditFragment.getThis().reloadPosts();
+			default:
+				// Nothing happens :)
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void onReloadPressed() {
+		refreshImage.startAnimation(animationRotate);
+		refreshItem.setActionView(refreshImage);
+	}
+	
 }

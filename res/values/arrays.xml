@@ -9,6 +9,13 @@
         <item>Gilded</item>
     </string-array>
     
+    <string-array name="threedotmenu_items">
+        <item>Share reddit post URL</item>
+        <item>Share image URL</item>
+        <item>View comments</item>
+        <item>Visit OP\'s reddit</item>
+    </string-array>
+    
     <!-- Settings -->
     
     <string-array name="settings_theme_names">

@@ -8,6 +8,9 @@
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- API 19 theme customizations can go here. -->
         
+        <!--item name="android:windowTranslucentStatus">true</item-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        
     </style>
 
 </resources>

@@ -76,6 +76,14 @@
         <item name="android:background">@drawable/card_action_button_background_nodivider</item>
     </style>
     
+    <style name="CardActionButtonWithIconNoTopDividerHoloLight" parent="@style/CardActionButtonWithIconNoTopDivider">
+        <item name="android:textColor">@drawable/card_button_text_holo_light</item>
+    </style>
+    
+    <style name="CardActionButtonWithIconNoTopDividerHoloDark" parent="@style/CardActionButtonWithIconNoTopDivider">
+        <item name="android:textColor">@drawable/card_button_text_holo_dark</item>
+    </style>
+    
     <style name="CardTitle" parent="@style/CardText">
         <item name="android:textSize">@dimen/card_large_text</item>
         <item name="android:textColor">@color/card_title_text</item>
@@ -91,7 +99,7 @@
         <item name="android:paddingTop">16.0dip</item>
         <item name="android:paddingRight">0.0dip</item>
         <item name="android:paddingBottom">8.0dip</item>
-        <item name="android:src">@android:drawable/ic_menu_share</item>
+        <item name="android:src">@drawable/ic_action_back_of_card_training</item>
         <!--item name="android:layoutDirection">locale</item-->
         <item name="android:paddingLeft">16.0dip</item>
         <item name="android:paddingRight">0.0dip</item>

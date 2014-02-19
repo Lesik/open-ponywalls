@@ -5,4 +5,5 @@ public class RedditItem {
 	public String author;
 	public int points;
 	public String url;
+	public String commentsUrl;
 }

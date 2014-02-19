@@ -43,7 +43,7 @@ public class SettingsActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		
 		// Load Utils
-		Utils utils = new Utils();
+		ThemeUtils utils = new ThemeUtils();
 		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
 		
 		getWindow().setWindowAnimations(0);
@@ -184,8 +184,9 @@ public class SettingsActivity extends FragmentActivity {
 				themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					public boolean onPreferenceChange(Preference preference, Object newValue) {
 						themePreference.setSummary(newValue.toString());
-						Utils utils = new Utils();
-						utils.loadThemeWithId(getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString());
+						ThemeUtils utils = new ThemeUtils();
+						utils.createTransparency(getActivity(), getResources(), getActivity(), utils.loadThemeWithId(
+								getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString()));
 						return true;
 					}
 				});

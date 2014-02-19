@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.WallpaperManager;
@@ -33,9 +32,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -52,7 +54,6 @@ import com.novoda.imageloader.core.cache.LruBitmapCache;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 
 public class RedditFragment extends Fragment implements OnScrollListener {
@@ -69,7 +70,6 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	private RequestQueue reqQueue;
 	private ArrayList<RedditItem> itemArray;
 	private RedditAdapter postAdapter;
-	private PullToRefreshLayout mPullToRefreshLayout;
 	private static ImageManager imageManager;
 	private Parcelable savedState;
 	private String lastPostId;
@@ -80,16 +80,14 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	private GridView posts;;
 	private ScrollView emptyLayout;
 	private LinearLayout errorLayout;
-	private SmoothProgressBar progressBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate our custom view
 		View view = inflater.inflate(R.layout.activity_fragment, null);
-		posts			= (GridView)			view.findViewById(R.id.post);
-		errorLayout 	= (LinearLayout)		view.findViewById(R.id.error_layout);
-		emptyLayout		= (ScrollView)		view.findViewById(R.id.empty_layout);
-		progressBar 	= (SmoothProgressBar)	view.findViewById(R.id.smoothprogressbar);
+		posts				= (GridView)				view.findViewById(R.id.post);
+		errorLayout 		= (LinearLayout)			view.findViewById(R.id.error_layout);
+		emptyLayout			= (ScrollView)				view.findViewById(R.id.empty_layout);
 		return view;
 	}
 	
@@ -141,6 +139,7 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	
 	public void reloadPosts() {
 		if(checkConnectionAndShowError()) {
+			HomeActivity.getThis().onReloadPressed();
 			initiateParsing();
 			populateList(url);
 			parsingFinished();
@@ -154,9 +153,6 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	}
 	
 	private void populateList(String urlToParse) {
-		// Show (Smooth)ProgressBar
-		showProgressBar();
-		
 		JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET, urlToParse, null, new Response.Listener<JSONObject>() {
 	
 				@Override
@@ -193,21 +189,20 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	public void parseJson(JSONObject jsonObject) {
 		try {
 			emptyLayout.setVisibility(View.GONE);
-			int itemCount = 0;
             JSONObject value = jsonObject.getJSONObject("data");
 			JSONArray children = value.getJSONArray("children");
 			for(int i = 0; i< children.length(); i++) {
 				JSONObject child = children.getJSONObject(i).getJSONObject("data");
 				RedditItem item = new RedditItem();
-				item.title = (String) child.opt("title");
-				if(item.title != null) {
+				item.title = (String)child.opt("title");
+				if(item.title != null && (String)child.optString("thumbnail") != null) {
 					item.url = child.optString("url");
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 					// Checks if the image is NSFW *or* if NSFW is allowed. If one of them true, display that post.
 					if(!child.optBoolean("over_18") || prefs.getBoolean("nsfw_enabled", false)) {
 						item.author = child.optString("author");
 						item.points = child.optInt("score");
-						itemCount++;
+						item.commentsUrl = "https://reddit.com" + child.optString("permalink");
 						itemArray.add(item);
 		                
 		                // Add the post ID as the last one
@@ -221,17 +216,17 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 					//
 					break;
 				}
+				currentlyLoading = false;
 			}
-			// Hide (Smooth)ProgressBar
-			hideProgressBar();
 			
 			// Check if no items are displayed
-			if(itemCount == 0) {
+			if(children.length() == 0 && itemArray.isEmpty()) {
 				emptyLayout.setVisibility(View.VISIBLE);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			currentlyLoading = false;
 			showStackTraceInDialog(e, getActivity());
 		}
 	}
@@ -268,18 +263,25 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	/*
 	 * Local listeners
 	 */
-
+	
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// Save the current GridView state (to save the position)
 		savedState = posts.onSaveInstanceState();
+		
+		if(firstVisibleItem == 1) {
+			for(int i=0; i<10; i++)
+				System.out.println("Currently viewing first item.");
+		}
 		
 		// Check if currently at the bottom of the GridView and whether currelty loading something
         if(firstVisibleItem + visibleItemCount == totalItemCount && !currentlyLoading) {
         	// It is important to check if something is currently loading, otherwise this method is going to be called
         	// → multiple times in a row which results in a continuous loading of posts...which is just not what I want
         	// → and not what the user wants. Pretty cool trick. I am actually proud of me for thinking of this. :-)
+        	HomeActivity.getThis().onReloadPressed();
         	populateList(getArguments().getString(ARG_SUBREDDIT_URL) + ".json" + "?limit=10" + "&after=" + lastPostId);
+        	currentlyLoading = true;
         }
 	}
 
@@ -353,6 +355,54 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.action_reload)));
 	}
 	
+	public void onThreeDotMenuClicked(final String commentsUrl, final String imageUrl, final String authorName) {
+		View threeDotMenuView = getActivity().getLayoutInflater().inflate(R.layout.dialog_list, null);
+		ListView threeDotMenuList = (ListView)threeDotMenuView.findViewById(android.R.id.list);
+		threeDotMenuList.setPadding(5, 0, 5, 0);
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setView(threeDotMenuView);
+        alertDialog.setTitle("Select action");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.threedotmenu_items));
+        threeDotMenuList.setAdapter(adapter);
+        final AlertDialog dialog = alertDialog.create();
+        threeDotMenuList.setOnItemClickListener(new OnItemClickListener() {
+        	@Override
+        	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        		Intent i;
+        		switch (arg2) {
+        		case 0:
+        			// This is the first action - share the post/comments link
+        			i = new Intent();
+					i.setAction(Intent.ACTION_SEND);
+					i.putExtra(Intent.EXTRA_TEXT, commentsUrl);
+					i.setType("text/plain");
+					startActivity(Intent.createChooser(i, getResources().getString(R.string.dialog_share_via)));
+					break;
+				case 1:
+					// This is the second action - share the image link
+					i = new Intent();
+					i.setAction(Intent.ACTION_SEND);
+					i.putExtra(Intent.EXTRA_TEXT, imageUrl);
+					i.setType("text/plain");
+					startActivity(Intent.createChooser(i, getResources().getString(R.string.dialog_share_via)));
+					break;
+				case 2:
+					i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(commentsUrl));
+					startActivity(i);
+					break;
+				case 3:
+					i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse("https://reddit.com/u/" + authorName));
+					startActivity(i);
+					break;
+				}
+        		dialog.cancel();
+        	}
+		});
+        dialog.show();
+	}
+	
 	/*
 	 * Utils
 	 */
@@ -371,16 +421,6 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	
 	public void showErrorCrouton(int stringId) {
 		Crouton.makeText(getActivity(), getResources().getString(stringId), Style.ALERT).show();
-	}
-	
-	private void showProgressBar() {
-		progressBar.setVisibility(View.VISIBLE);
-		currentlyLoading = true;
-	}
-
-	private void hideProgressBar() {
-		progressBar.setVisibility(View.GONE);
-		currentlyLoading = false;
 	}
 	
 	private void showErrorLayout() {
@@ -411,6 +451,7 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	    stackTrace.setTypeface(Typeface.MONOSPACE);
     }
 	
+	/* For displaying the image using the ImageManager */
 	public static final ImageManager getImageManager() {
 	    return imageManager;
 	}
@@ -419,4 +460,7 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 		return posts.getPositionForView(v);
 	}
 	
+	public boolean isCurrentlyLoading() {
+		return currentlyLoading;
+	}
 }

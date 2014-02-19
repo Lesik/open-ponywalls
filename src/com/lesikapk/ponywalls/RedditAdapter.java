@@ -3,6 +3,8 @@ package com.lesikapk.ponywalls;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +26,10 @@ public class RedditAdapter extends BaseAdapter {
 	private Button downloadButton;
 	private ImageButton setWallpaperButton;
 	private ImageButton shareButton;
+	private ImageButton threeDotButton;
 	public static int i = 0;
+	
+	private boolean userLikesItDark;
 	
 	public static class ViewHolder {
 		TextView title;
@@ -36,6 +41,8 @@ public class RedditAdapter extends BaseAdapter {
 	public RedditAdapter(ArrayList<RedditItem> itemArray, Context context) {
 		list = itemArray;
 		mContext = context;
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		userLikesItDark = prefs.getBoolean("dark_mode_enabled", false);
 	}
 	
 	@Override
@@ -61,7 +68,13 @@ public class RedditAdapter extends BaseAdapter {
 		imageTagFactory.setDefaultImageResId(R.drawable.spinner);
 		imageTagFactory.setErrorImageId(R.drawable.icn_error_404_cloud);
         if(convertView == null) {
-        	convertView = LayoutInflater.from(mContext).inflate(R.layout.card_post, null);
+        	
+        	if(!userLikesItDark) {
+        		convertView = LayoutInflater.from(mContext).inflate(R.layout.card_post_holo_light, null);
+        	}
+        	else {
+        		convertView = LayoutInflater.from(mContext).inflate(R.layout.card_post_holo_dark, null);
+        	}
         	
         	holder = new ViewHolder();
             holder.title 			= (TextView)	convertView.findViewById(R.id.post_title);
@@ -73,11 +86,12 @@ public class RedditAdapter extends BaseAdapter {
         	downloadButton 			= (Button)		convertView.findViewById(R.id.download_button);
             setWallpaperButton 		= (ImageButton)	convertView.findViewById(R.id.set_wallpaper_button);
             shareButton				= (ImageButton)	convertView.findViewById(R.id.share_button);
+            threeDotButton			= (ImageButton) convertView.findViewById(R.id.threedot_button);
             
             convertView.setTag(holder);
         }
         else {
-            holder = (ViewHolder)convertView.getTag();
+        	holder = (ViewHolder)convertView.getTag();
         }
         // Title
         holder.title.setText(list.get(index).title);
@@ -127,6 +141,14 @@ public class RedditAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				RedditFragment.getThis().shareWallpaper(list.get(currentInstance.getPosForView(v)).url);
 				
+			}
+		});
+        
+        threeDotButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				RedditFragment.getThis().onThreeDotMenuClicked(list.get(currentInstance.getPosForView(v)).commentsUrl, list.get(currentInstance.getPosForView(v)).url, list.get(currentInstance.getPosForView(v)).author);
 			}
 		});
 	}

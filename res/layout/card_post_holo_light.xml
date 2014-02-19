@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Taken from Google Now version 3.1.8.914827 for Android -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_bg_holo_light"
+    android:orientation="vertical" >
+
+	<include layout="@layout/card_post_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginBottom="4.0dip"
+        android:layout_marginLeft="@dimen/card_padding"
+        android:layout_marginRight="@dimen/card_padding" >
+        
+        <!-- Could get the NSFW tag to work - disabling -->
+		<!--TextView
+		    android:id="@id/post_nsfw"
+		    style="@style/CardTextRed"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical"
+		    android:padding="3dp"
+		    android:text="@string/post_nsfw" /-->
+        
+        <TextView
+            android:id="@id/post_author"
+            style="@style/CardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/post_author_default" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        style="@style/CalendarEventCardTextBlock"
+        android:visibility="visible" >
+
+        <TextView
+            android:id="@+id/votes_prefix"
+            android:text="@string/post_votes_prefix"
+            style="@style/CardLightText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/votes"
+            style="@style/CardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/post_votes_count" />
+        
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/card_tagline"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:id="@+id/mycard_points"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calendar_name_label"
+            style="@style/CardLightText" />
+        <TextView android:id="@id/calendar_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/CardText" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/event_description_section"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description_label"
+            style="@style/CardLightText" />
+        <TextView
+            android:id="@id/event_description"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/CardText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <com.lesikapk.ponywalls.ResizableImageView
+            android:id="@id/post_image"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="center"
+            android:src="@drawable/spinner_holo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/event_guests_section"
+        style="@style/CalendarEventCardTextBlock">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/guests_label"
+            style="@style/CardLightText" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@id/event_guests"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@id/download_button"
+            style="@style/CardActionButtonWithIconNoTopDividerHoloLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="50"
+            android:drawableLeft="@drawable/ic_action_download_holo_light"
+            android:ellipsize="end"
+            android:text="@string/btn_download"
+            android:visibility="visible" />
+
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/set_wallpaper_button"
+            style="@style/CardActionButtonWithIconNoTopDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_wallpaper_holo_light" />
+        
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/share_button"
+            style="@style/CardActionButtonWithIconNoTopDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_action_share_holo_light" />
+
+    </LinearLayout>
+    <!-- android:drawableLeft="@drawable/ic_action_set_wallpaper" -->
+</LinearLayout>

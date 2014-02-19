@@ -14,6 +14,13 @@
         android:entries="@array/settings_theme_names"
         android:entryValues="@array/settings_theme_values" />
     
+    <CheckBoxPreference 
+        android:title="@string/settings_dark_mode_title"
+        android:key="dark_mode_enabled"
+        android:summaryOn="@string/settings_dark_mode_summaryon"
+        android:summaryOff="@string/settings_dark_mode_summaryoff"
+        android:defaultValue="false" />
+    
     <PreferenceCategory 
         android:title="@string/settings_category_ui">
         
