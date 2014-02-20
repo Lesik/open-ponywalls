@@ -90,12 +90,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" >
 
-        <com.lesikapk.ponywalls.ResizableImageView
+        <com.lesikapk.ponywalls.widget.ScaleImageView
             android:id="@id/post_image"
             android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="center"
+            android:layout_height="wrap_content"
             android:src="@drawable/spinner_holo" />
 
     </LinearLayout>

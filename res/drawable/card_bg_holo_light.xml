@@ -19,7 +19,10 @@
 
             <solid android:color="@android:color/white" />
 
-            <padding android:bottom="2dp" />
+            <padding android:bottom="0dp"
+                android:top="0dp" 
+            	android:left="5dp"
+                android:right="5dp" />
             
             <!--
             	android:top="8dp" 

@@ -1,4 +1,4 @@
-package com.lesikapk.ponywalls;
+package com.lesikapk.ponywalls.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

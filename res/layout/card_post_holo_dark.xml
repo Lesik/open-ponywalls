@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" >
 
-        <com.lesikapk.ponywalls.ResizableImageView
+        <com.lesikapk.ponywalls.widget.ResizableImageView
             android:id="@id/post_image"
             android:layout_width="fill_parent"
             android:layout_height="200dp"

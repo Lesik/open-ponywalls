@@ -47,6 +47,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.huewu.pla.lib.MultiColumnListView;
+import com.huewu.pla.lib.internal.PLA_AbsListView;
 import com.novoda.imageloader.core.ImageManager;
 import com.novoda.imageloader.core.LoaderSettings;
 import com.novoda.imageloader.core.LoaderSettings.SettingsBuilder;
@@ -56,7 +58,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 
-public class RedditFragment extends Fragment implements OnScrollListener {
+public class RedditFragment extends Fragment implements com.huewu.pla.lib.internal.PLA_AbsListView.OnScrollListener {
 	
 	// Class relative
 	public static final String ARG_SECTION_NUMBER = "section_number";
@@ -77,7 +79,7 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 
 	
 	// Views
-	private GridView posts;;
+	private MultiColumnListView posts;;
 	private ScrollView emptyLayout;
 	private LinearLayout errorLayout;
 	
@@ -85,24 +87,10 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate our custom view
 		View view = inflater.inflate(R.layout.activity_fragment, null);
-		posts				= (GridView)				view.findViewById(R.id.post);
+		posts				= (MultiColumnListView)		view.findViewById(R.id.post);
 		errorLayout 		= (LinearLayout)			view.findViewById(R.id.error_layout);
 		emptyLayout			= (ScrollView)				view.findViewById(R.id.empty_layout);
 		return view;
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-			posts.setNumColumns(1);
-			posts.onRestoreInstanceState(savedState);
-		}
-		else {
-			// If phone in landscape
-			posts.setNumColumns(2);
-			posts.onRestoreInstanceState(savedState);
-		}
-		super.onConfigurationChanged(newConfig);
 	}
 	
 	@Override
@@ -263,11 +251,11 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	/*
 	 * Local listeners
 	 */
-	
+
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+	public void onScroll(PLA_AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// Save the current GridView state (to save the position)
-		savedState = posts.onSaveInstanceState();
+//		savedState = posts.onSaveInstanceState();
 		
 		if(firstVisibleItem == 1) {
 			for(int i=0; i<10; i++)
@@ -275,19 +263,19 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 		}
 		
 		// Check if currently at the bottom of the GridView and whether currelty loading something
-        if(firstVisibleItem + visibleItemCount == totalItemCount && !currentlyLoading) {
-        	// It is important to check if something is currently loading, otherwise this method is going to be called
-        	// → multiple times in a row which results in a continuous loading of posts...which is just not what I want
-        	// → and not what the user wants. Pretty cool trick. I am actually proud of me for thinking of this. :-)
-        	HomeActivity.getThis().onReloadPressed();
-        	populateList(getArguments().getString(ARG_SUBREDDIT_URL) + ".json" + "?limit=10" + "&after=" + lastPostId);
-        	currentlyLoading = true;
-        }
+	    if(firstVisibleItem + visibleItemCount == totalItemCount && !currentlyLoading) {
+	    	// It is important to check if something is currently loading, otherwise this method is going to be called
+	    	// → multiple times in a row which results in a continuous loading of posts...which is just not what I want
+	    	// → and not what the user wants. Pretty cool trick. I am actually proud of me for thinking of this. :-)
+	    	HomeActivity.getThis().onReloadPressed();
+	    	populateList(getArguments().getString(ARG_SUBREDDIT_URL) + ".json" + "?limit=10" + "&after=" + lastPostId);
+	    	currentlyLoading = true;
+	    }
 	}
-
+	
 	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// This is useless but I need to have this implemented.
+	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
 		
 	}
 	
@@ -457,10 +445,12 @@ public class RedditFragment extends Fragment implements OnScrollListener {
 	}
 	
 	public int getPosForView(View v) {
+		// It is really cool and makes me so happy that this method works with the MultiColumnListView by GDG-Korea! I love you guys! 
 		return posts.getPositionForView(v);
 	}
 	
 	public boolean isCurrentlyLoading() {
 		return currentlyLoading;
 	}
+
 }
