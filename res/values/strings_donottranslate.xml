@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
     <!--
     	DO NOT EDIT THIS DOCUMENT
     	DO NOT TRANSLATE THIS DOCUMENT IN OTHER LANGUAGES
@@ -7,14 +8,14 @@
     	NOT BE TRANSLATED OR EDITED! 
     -->
     
-    
     <!-- <DO NOT EDIT!> -->
     <string name="setting_theme_holo_red_value">theme.holo.red</string>
-    <string name="setting_theme_holo_dark_value">theme.holo.dark</string>
     <string name="setting_theme_holo_green_value">theme.holo.green</string>
     <string name="setting_theme_holo_blue_value">theme.holo.blue</string>
     <string name="setting_theme_holo_lightblue_value">theme.holo.lightblue</string>
     <string name="setting_theme_holo_orange_value">theme.holo.orange</string>
-    <string name="setting_theme_holo_light_darkactionbar_value">theme.holo.light.darkactionbar</string>
+    <string name="setting_theme_holo_light_value">theme.holo.light</string>
+    <string name="setting_theme_holo_dark_value">theme.holo.dark</string>
+    <string name="setting_theme_holo_black_value">theme.holo.black</string>
     <!-- </DO NOT EDIT!> -->
 </resources>

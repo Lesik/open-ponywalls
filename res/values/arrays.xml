@@ -20,22 +20,24 @@
     
     <string-array name="settings_theme_names">
         <item>@string/setting_theme_holo_red_name</item>
-        <item>@string/setting_theme_holo_dark_name</item>
         <item>@string/setting_theme_holo_green_name</item>
         <item>@string/setting_theme_holo_blue_name</item>
         <item>@string/setting_theme_holo_lightblue_name</item>
         <item>@string/setting_theme_holo_orange_name</item>
-        <item>@string/setting_theme_holo_light_darkactionbar_name</item>
+        <item>@string/setting_theme_holo_light_name</item>
+        <item>@string/setting_theme_holo_dark_name</item>
+        <item>@string/setting_theme_holo_black_name</item>
     </string-array>
     
     <string-array name="settings_theme_values">
         <item>@string/setting_theme_holo_red_value</item>
-        <item>@string/setting_theme_holo_dark_value</item>
         <item>@string/setting_theme_holo_green_value</item>
         <item>@string/setting_theme_holo_blue_value</item>
         <item>@string/setting_theme_holo_lightblue_value</item>
         <item>@string/setting_theme_holo_orange_value</item>
-        <item>@string/setting_theme_holo_light_darkactionbar_value</item>
+        <item>@string/setting_theme_holo_light_value</item>
+        <item>@string/setting_theme_holo_dark_value</item>
+        <item>@string/setting_theme_holo_black_value</item>
     </string-array>
     
     <string-array name="settings_ui_columns">

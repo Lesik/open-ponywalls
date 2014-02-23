@@ -1,8 +1,13 @@
 package com.lesikapk.ponywalls;
 
+import com.lesikapk.ponywalls.library.SystemBarTintManager;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract.Root;
 import android.support.v4.app.Fragment;
@@ -14,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class HomeActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
@@ -24,12 +30,14 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private static HomeActivity currentInstance;
-	private String subreddit = "http://www.reddit.com/r/all/";
+	private String subreddit = "http://www.reddit.com/";
 	private String url;
-	private ThemeUtils utils;
 	private MenuItem refreshItem;
 	private ImageView refreshImage;
 	private Animation animationRotate;
+	private FrameLayout fragmentHolder;
+	
+	private ThemeUtils themeUtils;
 	
 	public static HomeActivity getThis() {
 		return currentInstance;
@@ -38,12 +46,6 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-//		setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// Set up utils
-		utils = new ThemeUtils();
-		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
 		currentInstance = this;
 		
 		// Set up the action bar to show a dropdown list
@@ -54,14 +56,30 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		
 		// Inflate layout
 		setContentView(R.layout.activity_home);
+		fragmentHolder = (FrameLayout) findViewById(R.id.container);
 		
 		// Set up the dropdown list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
+				
 		// Specify a SpinnerAdapter to populate the dropdown list.
-				new ArrayAdapter<String>(actionBar.getThemedContext(),
-						android.R.layout.simple_list_item_1,
-						android.R.id.text1, getResources().getStringArray(R.array.tab_names)), this);
+			new ArrayAdapter<String>(actionBar.getThemedContext(),
+					android.R.layout.simple_list_item_1,
+					android.R.id.text1, getResources().getStringArray(R.array.tab_names)), this);
+		
+		// Set up ThemeUtils
+		themeUtils = new ThemeUtils();
+		themeUtils.loadTheme(this, fragmentHolder, false);
+		
 		// Set up animations
+		initiateAnimation();
+		
+		// Inflate ImageView
+		LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		refreshImage = (ImageView)inflater.inflate(R.layout.actionbar_indeterminate_progress, null);
+		
+	}
+
+	private void initiateAnimation() {
 		animationRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
 		animationRotate.setRepeatCount(Animation.INFINITE);
 		animationRotate.setFillAfter(true);
@@ -85,16 +103,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 				
 			}
 		});
-		// Inflate ImageView
-		LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		refreshImage = (ImageView)inflater.inflate(R.layout.actionbar_indeterminate_progress, null);
-		
 	}
-
+	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current dropdown position.
-		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
 			getActionBar().setSelectedNavigationItem(
 					savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
@@ -107,10 +120,10 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar().getSelectedNavigationIndex());
 	}
 
-	@Override
 	protected void onResume() {
-		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
 		super.onResume();
+		if(themeUtils != null)
+			themeUtils.loadTheme(this, fragmentHolder, false);
 	}
 	
 	@Override

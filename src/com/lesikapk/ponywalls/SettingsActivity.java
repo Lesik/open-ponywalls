@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -21,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lesikapk.ponywalls.library.SystemBarTintManager;
+
 public class SettingsActivity extends FragmentActivity {
 
 	/**
@@ -32,7 +35,13 @@ public class SettingsActivity extends FragmentActivity {
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
+	PagerTitleStrip tabs; 
+	
+	ThemeUtils themeUtils;
+	SystemBarTintManager tintManager;
+	SystemBarTintManager.SystemBarConfig config;
+	static SettingsActivity mThis;
+	
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
@@ -42,16 +51,16 @@ public class SettingsActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// Load Utils
-		ThemeUtils utils = new ThemeUtils();
-		utils.loadTheme(getApplicationContext(), getResources(), this, getActionBar());
-		
 		getWindow().setWindowAnimations(0);
 		setContentView(R.layout.activity_settings);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		PagerTitleStrip tabs = (PagerTitleStrip)findViewById(R.id.pager_title_strip);
-		tabs.setBackgroundColor(getResources().getColor(R.color.gray));
+		tabs = (PagerTitleStrip)findViewById(R.id.pager_title_strip);
+		
+		// Load Utils
+		themeUtils = new ThemeUtils();
+		themeUtils.loadTheme(this, tabs, true);
+		mThis = this;
 		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
@@ -78,6 +87,21 @@ public class SettingsActivity extends FragmentActivity {
 	            return true;
 	    }
 	    return super.onOptionsItemSelected(item);
+	}
+	
+	public static SettingsActivity getThis() {
+		return mThis;
+	}
+	
+	public static ThemeUtils getThemeUtils() {
+		return getThis().themeUtils;
+	}
+	
+	public static void reloadTheme(String newSettingsValue) {
+		// It is important to use loadThemeWithId here because the SharedPreferences get updated slowly. So we have to parse the theme that
+		// we get directly from the onPreferenceDismissListener or whatever its name was...phew that's complicated shit!
+		if(getThemeUtils() != null && getThis().tabs != null)
+			getThemeUtils().loadTheme(getThis(), getThis().tabs, true, newSettingsValue);
 	}
 	
 	/**
@@ -111,20 +135,9 @@ public class SettingsActivity extends FragmentActivity {
 				return fragment;
 			}
 			else {
-				switch (position) {
-					case 2:
-						xml = R.layout.changelog;
-						break;
-					case 3:
-						xml = R.layout.changelog;
-						break;
-					default:
-						xml = R.layout.changelog;
-						break;
-				}
 				Fragment fragment = new OtherFragment();
 				Bundle args = new Bundle();
-				args.putInt(OtherFragment.ARG_LAYOUT_XML, xml);
+				args.putInt(OtherFragment.ARG_LAYOUT_XML, R.xml.help);
 				args.putInt(OtherFragment.ARG_SECTION_NUMBER, position + 1);
 				fragment.setArguments(args);
 				return fragment;
@@ -133,7 +146,7 @@ public class SettingsActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 3;
 		}
 
 		@Override
@@ -145,8 +158,6 @@ public class SettingsActivity extends FragmentActivity {
 			case 1:
 				return getString(R.string.tab_author).toUpperCase(l);
 			case 2:
-				return getString(R.string.tab_changelog).toUpperCase(l);
-			case 3:
 				return getString(R.string.tab_help).toUpperCase(l);
 			}
 			return null;
@@ -163,7 +174,9 @@ public class SettingsActivity extends FragmentActivity {
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
-		public static final String ARG_PREFERENCE_XML = "preference_xml"; 
+		public static final String ARG_PREFERENCE_XML = "preference_xml";
+		
+		private ThemeUtils themeUtils;
 
 		public SettingsFragment() {
 			
@@ -183,10 +196,20 @@ public class SettingsActivity extends FragmentActivity {
 				
 				themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						// Update the current theme in the summary
 						themePreference.setSummary(newValue.toString());
-						ThemeUtils utils = new ThemeUtils();
-						utils.createTransparency(getActivity(), getResources(), getActivity(), utils.loadThemeWithId(
-								getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString()));
+						
+						SettingsActivity.reloadTheme(newValue.toString());
+						
+						Context context = getActivity().getApplicationContext();
+						// If the theme before the clicking 
+						if(SettingsActivity.getThemeUtils().isThemeDark(getActivity(), SettingsActivity.getThemeUtils().getThemeSetting(context))
+								!= SettingsActivity.getThemeUtils().isThemeDark(getActivity(), newValue.toString())) {
+							getActivity().finish();
+							getActivity().startActivity(getActivity().getIntent());
+						}
+//						getThemeUtils().createTransparency(getActivity(), getResources(), getActivity(), getThemeUtils().loadThemeWithId(
+//								getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString()));
 						return true;
 					}
 				});

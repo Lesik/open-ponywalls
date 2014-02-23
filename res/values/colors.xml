@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="gnow_bg">#e5e5e5</color>
+    
     <color name="activity_bg">#ffeeeeee</color>
     
     <color name="holo_dark">#ff343434</color>
@@ -12,14 +13,15 @@
     
     <!-- ListView colors -->
     <color name="listview_item_background_holo_dark">#111111</color>
-    
+    <color name="listview_bg_holo_light">#cccccc</color>
     
     <!-- Theme colors -->
     <color name="theme_holo_red">#A60000</color>
-    <color name="theme_holo_dark">#222222</color>
     <color name="theme_holo_green">#268E00</color>
     <color name="theme_holo_blue">#06456A</color>
     <color name="theme_holo_lightblue">#33B5E5</color>
     <color name="theme_holo_orange">#DD5500</color>
-    <color name="theme_holo_light_darkactionbar">#222222</color>
+    <color name="theme_holo_light">#DDDDDD</color>
+	<color name="theme_holo_dark">#222222</color>
+    <color name="theme_holo_black">#000000</color>
 </resources>

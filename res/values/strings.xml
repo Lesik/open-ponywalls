@@ -83,10 +83,11 @@
     <string name="settings_ui_landscape_columns_summary">A value between two and three is suggested</string>
     
     <string name="setting_theme_holo_red_name">Holo Red</string>
-    <string name="setting_theme_holo_dark_name">Holo Dark</string>
     <string name="setting_theme_holo_green_name">Holo Green</string>
     <string name="setting_theme_holo_blue_name">Holo Blue</string>
     <string name="setting_theme_holo_lightblue_name">Holo Light Blue</string>
     <string name="setting_theme_holo_orange_name">Holo Orange</string>
-    <string name="setting_theme_holo_light_darkactionbar_name">Holo Light with dark ActionBar</string>
+    <string name="setting_theme_holo_light_name">Holo Light</string>
+    <string name="setting_theme_holo_dark_name">Holo Dark</string>
+    <string name="setting_theme_holo_black_name">Holo Black</string>
 </resources>

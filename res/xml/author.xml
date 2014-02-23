@@ -38,10 +38,10 @@
 			        android:data="https://developer.android.com/tools/support-library/features.html#v13" />
 		</PreferenceScreen>
 		<PreferenceScreen
-		     android:title="Multi Item Row ListAdapter"
-		     android:summary="by Umano/SoThree, Inc.">
+		     android:title="AndroidStaggeredGrid"
+		     android:summary="by Etsy, Inc.">
 			<intent android:action="android.intent.action.VIEW"
-			        android:data="https://github.com/umano/MultiItemRowListAdapter" />
+			        android:data="https://github.com/etsy/AndroidStaggeredGrid" />
 		</PreferenceScreen>
 		<PreferenceScreen
 		     android:title="Volley"
@@ -66,12 +66,6 @@
 		     android:summary="by Antoine Merle (castorflex)">
 			<intent android:action="android.intent.action.VIEW"
 			        android:data="https://github.com/castorflex/SmoothProgressBar" />
-		</PreferenceScreen>
-		<PreferenceScreen
-		     android:title="ChangeLog Library"
-		     android:summary="by Gabriele Mariotti">
-			<intent android:action="android.intent.action.VIEW"
-			        android:data="https://github.com/gabrielemariotti/changeloglib" />
 		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory

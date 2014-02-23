@@ -17,13 +17,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,10 +34,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -47,8 +48,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.huewu.pla.lib.MultiColumnListView;
-import com.huewu.pla.lib.internal.PLA_AbsListView;
+import com.etsy.android.grid.StaggeredGridView;
+import com.lesikapk.ponywalls.library.SystemBarTintManager;
 import com.novoda.imageloader.core.ImageManager;
 import com.novoda.imageloader.core.LoaderSettings;
 import com.novoda.imageloader.core.LoaderSettings.SettingsBuilder;
@@ -58,7 +59,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 
-public class RedditFragment extends Fragment implements com.huewu.pla.lib.internal.PLA_AbsListView.OnScrollListener {
+public class RedditFragment extends Fragment implements OnScrollListener {
 	
 	// Class relative
 	public static final String ARG_SECTION_NUMBER = "section_number";
@@ -73,21 +74,24 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	private ArrayList<RedditItem> itemArray;
 	private RedditAdapter postAdapter;
 	private static ImageManager imageManager;
-	private Parcelable savedState;
+	private int savedPosition;
+	private int savedPositionOffset;
 	private String lastPostId;
 	private boolean currentlyLoading;
 
 	
 	// Views
-	private MultiColumnListView posts;;
-	private ScrollView emptyLayout;
+	private StaggeredGridView posts;
+	private View loadingLayout;
 	private LinearLayout errorLayout;
+	private ScrollView emptyLayout; 
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate our custom view
 		View view = inflater.inflate(R.layout.activity_fragment, null);
-		posts				= (MultiColumnListView)		view.findViewById(R.id.post);
+		loadingLayout = inflater.inflate(R.layout.progress_bar, null);
+		posts				= (StaggeredGridView)		view.findViewById(R.id.post);
 		errorLayout 		= (LinearLayout)			view.findViewById(R.id.error_layout);
 		emptyLayout			= (ScrollView)				view.findViewById(R.id.empty_layout);
 		return view;
@@ -100,9 +104,10 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 		mThis = this;
 		url = getArguments().getString(ARG_SUBREDDIT_URL) + ".json" + "?limit=10";
 		
+				
 		// General UI
 		getView().getRootView().setBackgroundColor(getResources().getColor(R.color.gnow_bg));
-//		posts.addFooterView(progressBar);
+		posts.addFooterView(loadingLayout);
 		
 		// ImageLoader stuff
 	    LoaderSettings settings = new SettingsBuilder()
@@ -112,7 +117,7 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	    	.withConnectionTimeout(20000)
 	    	.withReadTimeout(30000)
 	    	.build(getActivity());
-	    imageManager = new ImageManager(getActivity(), settings);
+	    imageManager = new ImageManager(getActivity().getApplicationContext(), settings);
     	
 		initiateParsing();
 		populateList(url);
@@ -121,13 +126,23 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	    super.onActivityCreated(savedInstanceState);
 	}
 	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		posts.setSelection(savedPosition);
+	}
+	
 	/*
 	 * GridView stuff
 	 */
 	
 	public void reloadPosts() {
 		if(checkConnectionAndShowError()) {
-			HomeActivity.getThis().onReloadPressed();
 			initiateParsing();
 			populateList(url);
 			parsingFinished();
@@ -141,6 +156,10 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	}
 	
 	private void populateList(String urlToParse) {
+		HomeActivity.getThis().onReloadPressed();
+		showLoadingLayout();
+		hideEmptyLayout();
+		
 		JsonObjectRequest jsonReq = new JsonObjectRequest(Request.Method.GET, urlToParse, null, new Response.Listener<JSONObject>() {
 	
 				@Override
@@ -155,12 +174,13 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 			public void onErrorResponse(final VolleyError arg0) {
 				// Hide (Smooth)ProgressBar and show an error message
 				arg0.printStackTrace();
+				hideLoadingLayout();
 				showErrorLayout();
 				errorLayout.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						showStackTraceInDialog(arg0, getActivity());
+						showStackTraceInDialog(arg0, getActivity().getApplicationContext());
 					}
 				});
 			}
@@ -176,14 +196,13 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	
 	public void parseJson(JSONObject jsonObject) {
 		try {
-			emptyLayout.setVisibility(View.GONE);
-            JSONObject value = jsonObject.getJSONObject("data");
+			JSONObject value = jsonObject.getJSONObject("data");
 			JSONArray children = value.getJSONArray("children");
 			for(int i = 0; i< children.length(); i++) {
 				JSONObject child = children.getJSONObject(i).getJSONObject("data");
 				RedditItem item = new RedditItem();
 				item.title = (String)child.opt("title");
-				if(item.title != null && (String)child.optString("thumbnail") != null) {
+				if(item.title != null) {
 					item.url = child.optString("url");
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 					// Checks if the image is NSFW *or* if NSFW is allowed. If one of them true, display that post.
@@ -205,17 +224,19 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 					break;
 				}
 				currentlyLoading = false;
+				hideErrorLayout();
+				hideLoadingLayout();
 			}
 			
 			// Check if no items are displayed
 			if(children.length() == 0 && itemArray.isEmpty()) {
-				emptyLayout.setVisibility(View.VISIBLE);
+				showEmptyLayout();
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			currentlyLoading = false;
-			showStackTraceInDialog(e, getActivity());
+//			showStackTraceInDialog(e, getActivity().getApplicationContext());
 		}
 	}
 
@@ -253,28 +274,26 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 	 */
 
 	@Override
-	public void onScroll(PLA_AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		// Save the current GridView state (to save the position)
-//		savedState = posts.onSaveInstanceState();
+		savedPosition = firstVisibleItem;
+		savedPositionOffset = (posts.getChildAt(0) == null) ? 0 : posts.getChildAt(0).getTop();
 		
 		if(firstVisibleItem == 1) {
-			for(int i=0; i<10; i++)
-				System.out.println("Currently viewing first item.");
 		}
 		
-		// Check if currently at the bottom of the GridView and whether currelty loading something
+		// Check if currently at the bottom of the GridView and whether currenlty loading something
 	    if(firstVisibleItem + visibleItemCount == totalItemCount && !currentlyLoading) {
 	    	// It is important to check if something is currently loading, otherwise this method is going to be called
-	    	// → multiple times in a row which results in a continuous loading of posts...which is just not what I want
-	    	// → and not what the user wants. Pretty cool trick. I am actually proud of me for thinking of this. :-)
-	    	HomeActivity.getThis().onReloadPressed();
+	    	// multiple times in a row which results in a continuous loading of posts...which is just not what I want
+	    	// and not what the user wants. Pretty cool trick. I am actually proud of me for thinking of this. :-)
 	    	populateList(getArguments().getString(ARG_SUBREDDIT_URL) + ".json" + "?limit=10" + "&after=" + lastPostId);
 	    	currentlyLoading = true;
 	    }
 	}
 	
 	@Override
-	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -340,7 +359,7 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 		shareIntent.setAction(Intent.ACTION_SEND);
 		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imageUrl));
 		shareIntent.setType("image/*");
-		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.action_reload)));
+		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.dialog_share_via)));
 	}
 	
 	public void onThreeDotMenuClicked(final String commentsUrl, final String imageUrl, final String authorName) {
@@ -419,13 +438,29 @@ public class RedditFragment extends Fragment implements com.huewu.pla.lib.intern
 		errorLayout.setVisibility(View.GONE);
 	}
 	
+	private void showEmptyLayout() {
+		emptyLayout.setVisibility(View.VISIBLE);
+	}
+
+	private void hideEmptyLayout() {
+		emptyLayout.setVisibility(View.GONE);
+	}
+	
+	private void showLoadingLayout() {
+		loadingLayout.findViewById(R.id.smoothprogressbar).setVisibility(View.VISIBLE);
+	}
+
+	private void hideLoadingLayout() {
+		loadingLayout.findViewById(R.id.smoothprogressbar).setVisibility(View.GONE);
+	}
+	
 	public void showStackTraceInDialog(Exception e, Context context) {
 	    // Converts the stack trace into a string
 	    StringWriter errors = new StringWriter();
 	    e.printStackTrace(new PrintWriter(errors));
 
 	    // Show the stack trace on Logcat
-	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
 	    // Add the buttons
 	    builder.setTitle(R.string.error_title);
 	    builder.setMessage(getResources().getString(R.string.error_descr_dialog) + errors.toString());
