@@ -89,18 +89,21 @@ public class ScaleImageView extends ImageView {
 		 * if both width and height are set scale width first. modify in future if necessary
 		 */
 		
-		if(widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST){
+		if (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST){
 			scaleToWidth = true;
-		}else if(heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST){
+		}
+		else if (heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST){
 			scaleToWidth = false;
-		}else throw new IllegalStateException("width or height needs to be set to match_parent or a specific dimension");
+		}
+		else throw new IllegalStateException("width or height needs to be set to match_parent or a specific dimension");
 		
-		if(getDrawable()==null || getDrawable().getIntrinsicWidth()==0 ){
+		if (getDrawable()==null || getDrawable().getIntrinsicWidth()==0 ){
 			// nothing to measure
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 			return;
-		}else{
-			if(scaleToWidth){
+		}
+		else{
+			if(scaleToWidth) {
 				int iw = this.getDrawable().getIntrinsicWidth();
 				int ih = this.getDrawable().getIntrinsicHeight();
 				int heightC = width*ih/iw;
@@ -114,11 +117,12 @@ public class ScaleImageView extends ImageView {
 				this.setScaleType(ScaleType.CENTER_CROP);
 				setMeasuredDimension(width, heightC);
 				
-			}else{
+			}
+			else {
 				// need to scale to height instead
 				int marg = 0;
-				if(getParent()!=null){
-					if(getParent().getParent()!=null){
+				if(getParent()!=null) {
+					if(getParent().getParent()!=null) {
 						marg+= ((RelativeLayout) getParent().getParent()).getPaddingTop();
 						marg+= ((RelativeLayout) getParent().getParent()).getPaddingBottom();
 					}

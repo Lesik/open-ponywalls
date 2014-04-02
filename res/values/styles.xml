@@ -18,4 +18,68 @@
         <item name="spbStyle">@style/SmoothProgressBar</item>
     </style>
     
+	<style name="MyTheme.Holo.Light.Transparent" parent="@android:style/Theme.Holo.Light">
+		<item name="android:windowIsTranslucent">true</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:backgroundDimEnabled">true</item>
+	</style>
+    
+    <style name="MyTheme.Holo.Transparent" parent="@android:style/Theme.Holo">
+		<item name="android:windowIsTranslucent">true</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:backgroundDimEnabled">true</item>
+	</style>
+    
+	<style name="post_text_small" parent="@style/post_text">
+		<item name="android:textSize">14sp</item>
+	</style>
+	
+	<style name="post_text_separator" parent="@android:style/Widget.TextView">
+	    <item name="android:paddingLeft">5dp</item>
+	    <item name="android:paddingRight">5dp</item>
+	</style>
+	
+	<style name="post_text_large" parent="@style/post_text">
+		<item name="android:textSize">20sp</item>android:text="@string/post_title_default"
+	</style>
+
+	<style name="post_text_title" parent="@style/post_text_large">
+		<item name="android:padding">16.0dip</item>
+		<item name="android:layout_marginRight">20dp</item>
+		<!-- API 17 ONLY - item name="android:textAlignment">viewStart"</item-->
+	</style>
+	
+	<style name="post_text">
+		<item name="android:textColor">?attr/post_text_color</item>
+	</style>
+
+	<style name="post_button">
+        <item name="android:textSize">@dimen/card_action_text</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:background">@drawable/card_action_button_background</item>
+        <item name="android:paddingLeft">@dimen/card_padding</item>
+        <item name="android:paddingRight">@dimen/card_padding</item>
+        <item name="android:drawablePadding">4.0dip</item>
+        <item name="android:paddingLeft">8.0dip</item>
+        <item name="android:paddingRight">@dimen/card_padding_nodivider</item>
+        <item name="android:background">@drawable/card_action_button_background_nodivider</item>
+	</style>
+
+	<!-- By Google -->
+	<style name="CardMenuButton">
+        <item name="android:gravity">end|top|center</item>
+        <item name="android:background">@null</item>
+        <item name="android:maxWidth">2.0dp</item>
+        <item name="android:maxHeight">2.0dp</item>
+        <item name="android:paddingLeft">16.0dip</item>
+        <item name="android:paddingTop">16.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:paddingBottom">8.0dip</item>
+        <item name="android:src">@drawable/ic_action_back_of_card_training</item>
+        <!--item name="android:layoutDirection">locale</item-->
+        <item name="android:paddingLeft">16.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+    </style>
+	
 </resources>

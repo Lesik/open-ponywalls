@@ -5,6 +5,9 @@
 	<item type="id" name="smoothprogressbar_layout" />
 	<item type="id" name="post" />
 	<item type="id" name="post_title" />
+	<item type="id" name="post_separator"></item>
+	<item type="id" name="post_votes_prefix" />
+	<item type="id" name="post_votes" />
 	<item type="id" name="post_author" />
 	<item type="id" name="post_image" />
 	<item type="id" name="post_nsfw" />
@@ -14,12 +17,18 @@
 	<item type="id" name="threedot_button"></item>
 	<item type="id" name="error_title"></item>
 	<item type="id" name="error_descr"></item>
-	<item type="id" name="error_layout"></item>
+	<item type="id" name="error_image"></item>
+	<item type="id" name="error_button_ok"></item>
 	<item type="id" name="retry_button"></item>
 	<item type="id" name="empty_layout"></item>
+	<item type="id" name="dialog_error_title"></item>
+	<item type="id" name="dialog_error_descr"></item>
+	<item type="id" name="dialog_error_stacktrace"></item>
+	
 	
 	<!-- Action bar -->
 	<item type="id" name="action_search"></item>
 	<item type="id" name="action_reload"></item>
 	<item type="id" name="action_settings"></item>
+	<item type="id" name="actionbar_done"></item>
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:divider="?android:attr/dividerVertical"
+    android:showDividers="end"
+    android:dividerPadding="12dp">
+
+	    <TextView
+	        android:id="@id/actionbar_done"
+	        style="?android:actionBarTabTextStyle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:paddingRight="20dp"
+	        android:paddingLeft="20dp"
+	        android:drawableLeft="@drawable/ic_action_done"
+	        android:drawablePadding="8dp"
+	        android:gravity="center_vertical"
+	        android:text="@string/actionbar_done" />
+	    
+</LinearLayout>

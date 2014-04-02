@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    <!-- For ExpandablePanel -->
+    <declare-styleable name="ExpandablePanel">
+        <attr name="handle" format="reference" />
+        <attr name="content" format="reference" />
+        <attr name="collapsedHeight" format="dimension" />
+        <attr name="animationDuration" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="ThemeDependentResources">
+		<attr name="activity_background" format="reference" />
+        
+       	<attr name="actionbar_icon_reload" format="reference" />
+
+   		<attr name="post_background" format="reference" />
+   		<attr name="post_text_color" format="reference" />
+    	<attr name="post_icon_download" format="reference" />
+    	<attr name="post_icon_set_as_wallpaper" format="reference" />
+    	<attr name="post_icon_share" format="reference" />
+	</declare-styleable>
+    
+</resources>

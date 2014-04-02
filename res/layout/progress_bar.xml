@@ -3,6 +3,7 @@
     android:id="@id/smoothprogressbar_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/card_bg_holo_light"
     android:animateLayoutChanges="true"
     android:orientation="vertical" >
 
@@ -12,8 +13,9 @@
 	    android:id="@id/smoothprogressbar"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_marginTop="8dp"
+	    android:layout_marginBottom="8dp"
 	    android:indeterminate="true"
-	    android:background="@drawable/progressbar_bg"
 	    app:spb_mirror_mode="false"
 	    app:spb_reversed="false"
 	    app:spb_stroke_separator_length="4dp"

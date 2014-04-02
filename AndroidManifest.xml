@@ -16,7 +16,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo" >
         <activity
             android:name="com.lesikapk.ponywalls.HomeActivity"
             android:label="@string/app_name"
@@ -30,6 +30,12 @@
         <activity
             android:name="com.lesikapk.ponywalls.SettingsActivity"
             android:label="@string/tab_settings" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity 
+            android:name="com.lesikapk.ponywalls.ImagePreview" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

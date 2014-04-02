@@ -1,15 +1,19 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-        Base application theme for API 19+. This theme completely replaces
-        AppBaseTheme from BOTH res/values/styles.xml and
-        res/values-v11/styles.xml on API 19+ devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- API 19 theme customizations can go here. -->
-        
-        <item name="android:windowTranslucentStatus">true</item>
+    <!--style name="Theme.PonyWalls.Holo" parent="@android:style/Theme.Holo">
+	    <item name="android:windowTranslucentNavigation">@bool/translucentNavBar</item>
+	    
+	    <No, because we want the good old Android 4.0.4 blue line actionbar. I fucking love it!>
+		<item name="android:actionBarStyle">@style/Widget.PonyWalls.ActionBar.Holo</item>
+	</style>
+
+	<style name="Theme.PonyWalls.Holo.Light" parent="@android:style/Theme.Holo.Light">
+		<item name="android:actionBarStyle">@style/Widget.PonyWalls.ActionBar.Holo.Light</item>
+	</style>
+    
+    <style name="AppBaseTheme" parent="android:Theme.Holo">
+        <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">@bool/translucentNavBar</item>
-    </style>
+    </style-->
 
 </resources>

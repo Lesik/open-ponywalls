@@ -6,7 +6,7 @@
 
             <corners android:radius="2dp"/>
 
-            <solid android:color="@android:color/darker_gray" />
+            <solid android:color="#FF3C3C3C" />
 
         </shape>
     </item>
@@ -17,7 +17,7 @@
 
             <corners android:radius="2dp" />
 
-            <solid android:color="@color/listview_item_background_holo_dark" />
+            <solid android:color="#FF292929" />
 
             <padding android:bottom="2dp" />
             

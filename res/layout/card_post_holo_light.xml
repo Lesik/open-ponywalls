@@ -93,7 +93,8 @@
         <com.lesikapk.ponywalls.widget.ScaleImageView
             android:id="@id/post_image"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/spinner_holo" />
 
     </LinearLayout>

@@ -7,12 +7,12 @@
         android:summaryOff="@string/settings_nsfw_summaryoff"
         android:defaultValue="false" />
     
-    <ListPreference
+    <!--ListPreference
         android:title="@string/settings_theme_title"
         android:key="theme"
         android:summary="@string/settings_theme_summary"
         android:entries="@array/settings_theme_names"
-        android:entryValues="@array/settings_theme_values" />
+        android:entryValues="@array/settings_theme_values" /-->
     
     <CheckBoxPreference 
         android:title="@string/settings_dark_mode_title"
@@ -21,7 +21,7 @@
         android:summaryOff="@string/settings_dark_mode_summaryoff"
         android:defaultValue="false" />
     
-    <PreferenceCategory 
+    <!--PreferenceCategory 
         android:title="@string/settings_category_ui">
         
 		<ListPreference
@@ -37,5 +37,10 @@
 	        android:summary="@string/settings_theme_summary"
 	        android:entries="@array/settings_ui_columns"
 	        android:entryValues="@array/settings_ui_columns" />
-    </PreferenceCategory>
+    </PreferenceCategory-->
+    
+    <Preference 
+        android:title="@string/settings_more_to_come_soon"
+        android:enabled="false" />
+    
 </PreferenceScreen>

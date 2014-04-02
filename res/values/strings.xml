@@ -3,6 +3,8 @@
 
     <string name="app_name">PonyWalls</string>
 	<string name="app_author_name">Lesik Pidgornyy (Developer)</string>
+	<string name="loading">Loading data&#8230;</string>
+	<string name="dummy_description">Description</string>
 	<string name="action_search">Search</string>
     <string name="action_reload">Reload</string>
     <string name="action_settings">Settings</string>
@@ -12,6 +14,13 @@
     <string name="tab_author">About</string>
     <string name="title_section3">Section 3</string>
     <string name="downloading_in_progress">Downloading wallpaper</string>
+    <string name="actionbar_done">Done</string>
+    <string name="error_stacktrace">PonyWalls error stacktrace</string>
+    
+    <!-- Toast -->
+    <string name="toast_error_copied_to_clipboard">Error stacktrace copied to clipboard.
+        \nIf you don\'t want to report a bug, this is of no concern for you.
+        \nIf you do, please include the copied text when contacting the developer.</string>
     
     <!-- Crouton -->
     <string name="crouton_download">Downloading wallpaper&#8230;</string>
@@ -21,8 +30,8 @@
     
     <string name="crouton_unexpected_error">An unexpected error occurred!</string>
     
-    <string name="error_title">Connection error</string>
-    <string name="error_descr">There was a problem connecting to the server. Please check your connection and try again. Click this to get more information.</string>
+    <string name="error_title">Error title</string>
+    <string name="error_descr">This is the dummy error description. It should be replaced by the real error. If it does not, contact the dev.</string>
     <string name="error_descr_dialog">There was a problem connecting to the server.
         \nPlease check your connection and try again.
         \n
@@ -30,6 +39,10 @@
         \n
         \n</string>
     <string name="btn_retry">Retry</string>
+    
+    <string name="dialog_error_title">Error message:</string>
+    <string name="dialog_error_description">Error description:</string>
+    <string name="dialog_error_stacktrace">Detailed stacktrace:</string>
     
     <string name="alert_send_report_title">Send error report</string>
     <string name="alert_send_report_message">You have just clicked on a dead link.
@@ -50,7 +63,7 @@
     <string name="post_title_default">Unknown post</string>
     <string name="post_author_prefix">by</string>
     <string name="post_author_default">by Anonymous</string>
-    <string name="post_nsfw">NSFW</string>
+    <string name="post_separator">•</string>
     <string name="post_votes_prefix">Votes:</string>
     <string name="post_votes_count">0</string>
     <string name="post_votes_suffix">pts.</string>
@@ -68,9 +81,11 @@
     <string name="settings_nsfw_summaryon">NSFW content shown</string>
     <string name="settings_nsfw_summaryoff">NSFW content hidden</string>
     
-    <string name="settings_dark_mode_title">Use dark UI</string>
-    <string name="settings_dark_mode_summaryon">Everything is dark now</string>
-    <string name="settings_dark_mode_summaryoff">In case you like it dark</string>
+    <string name="settings_more_to_come_soon">More features coming soon!</string>
+    
+    <string name="settings_dark_mode_title">Use Luna UI</string>
+    <string name="settings_dark_mode_summaryon">Luna is proud of you</string>
+    <string name="settings_dark_mode_summaryoff">Go back to Celestia, traitor!</string>
     
     <string name="settings_theme_title">Application theme</string>
     <string name="settings_theme_summary">In case you like it dark</string>
@@ -90,4 +105,47 @@
     <string name="setting_theme_holo_light_name">Holo Light</string>
     <string name="setting_theme_holo_dark_name">Holo Dark</string>
     <string name="setting_theme_holo_black_name">Holo Black</string>
+    
+    
+    <!-- Error string -->
+<string name="error_403_title">Invalid User</string>
+    <string name="error_403_message">The user you selected does not have permission to do that.</string>
+
+    <string name="error_subreddit_required_title">Subreddit Required</string>
+    <string name="error_subreddit_required_message">You must specify a subreddit.</string>
+
+    <string name="error_bad_captcha_title">Invalid CAPTCHA</string>
+    <string name="error_bad_captcha_message">The CAPTCHA you entered was incorrect. Please try again.</string>
+
+    <string name="error_404_title">Not Found (404)</string>
+    <string name="error_404_message">The data you requested could not be found.</string>
+
+    <string name="error_unknown_api_title">Error</string>
+    <string name="error_unknown_api_message">The server did not accept the request for an unknown reason. Please try again.</string>
+
+    <string name="error_redditdown_title">Reddit is Down</string>
+    <string name="error_redditdown_message">Reddit is under heavy load at the moment. Please try again.</string>
+
+    <string name="error_cancelled_title">Operation Cancelled</string>
+    <string name="error_cancelled_message">The current operation was cancelled.</string>
+
+    <string name="error_parse_title">Parse Error</string>
+    <string name="error_parse_message">Reddit sent some data I couldn\'t understand.</string>
+
+    <string name="error_unexpected_wallpaper_title">Wallpaper Error</string>
+    <string name="error_unexpected_wallpaper_message">An unknown internal error has occurred, related to setting the wallpaper.</string>
+
+    <string name="error_unexpected_image_title">Image error</string>
+    <string name="error_unexpected_image_message">An unknown error has occurred, related to the downloaded image.</string>
+
+    <string name="error_connection_title">Connection Error</string>
+    <string name="error_connection_message">There was a problem connecting to the server. Please check your connection and try again.</string>
+
+    <string name="error_malformed_url_title">Malformed URL</string>
+    <string name="error_malformed_url_message">An attempt was made to access an invalid URL.</string>
+
+    <string name="error_unknown_title">Unknown Error</string>
+    <string name="error_unknown_message">An unknown error occurred. Please try again.</string>
+    
+    <string name="tap_to_dismiss">Tap to dismiss.</string>
 </resources>

@@ -3,12 +3,15 @@ package com.lesikapk.ponywalls;
 import com.lesikapk.ponywalls.library.SystemBarTintManager;
 
 import android.app.ActionBar;
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.DocumentsContract.Root;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,8 +33,10 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private static HomeActivity currentInstance;
-	private String subreddit = "http://www.reddit.com/";
+	private String subreddit = "http://www.reddit.com/r/ponywalls/";
 	private String url;
+	private SharedPreferences prefs;
+	private boolean themeIsDark;
 	private MenuItem refreshItem;
 	private ImageView refreshImage;
 	private Animation animationRotate;
@@ -45,30 +50,39 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		currentInstance = this;
-		
+		// Initialize Theme
+		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		themeIsDark = prefs.getBoolean("dark_mode_enabled", false);
+		if(themeIsDark) {
+			setTheme(R.style.Theme_PonyWalls_Holo);
+		}
+		else {
+			setTheme(R.style.Theme_PonyWalls_Holo_Light);
+		}
+				
 		// Set up the action bar to show a dropdown list
 		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
+//		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		
 		// Inflate layout
 		setContentView(R.layout.activity_home);
-		fragmentHolder = (FrameLayout) findViewById(R.id.container);
+		fragmentHolder = (FrameLayout)findViewById(R.id.container);
+		
+		// Padding on Android 4.4+, disabled for now
+//		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//			System.out.println("KITKUTZ");
+//			SystemBarTintManager.SystemBarConfig tintManagerConfig = new SystemBarTintManager(this).getConfig();
+//			fragmentHolder.setPadding(0, tintManagerConfig.getPixelInsetTop(true), tintManagerConfig.getPixelInsetRight(), 0);
+//		}
 		
 		// Set up the dropdown list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
-				
-		// Specify a SpinnerAdapter to populate the dropdown list.
+			// Specify a SpinnerAdapter to populate the dropdown list.
 			new ArrayAdapter<String>(actionBar.getThemedContext(),
 					android.R.layout.simple_list_item_1,
 					android.R.id.text1, getResources().getStringArray(R.array.tab_names)), this);
-		
-		// Set up ThemeUtils
-		themeUtils = new ThemeUtils();
-		themeUtils.loadTheme(this, fragmentHolder, false);
 		
 		// Set up animations
 		initiateAnimation();
@@ -76,9 +90,16 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		// Inflate ImageView
 		LayoutInflater inflater = (LayoutInflater)getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		refreshImage = (ImageView)inflater.inflate(R.layout.actionbar_indeterminate_progress, null);
-		
+		super.onCreate(savedInstanceState);
 	}
 
+	@Override
+	protected void onResumeFragments() {
+		if(themeIsDark != prefs.getBoolean("dark_mode_enabled", false))
+			recreate();
+		super.onResumeFragments();
+	}
+	
 	private void initiateAnimation() {
 		animationRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
 		animationRotate.setRepeatCount(Animation.INFINITE);
@@ -86,9 +107,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		animationRotate.setAnimationListener(new AnimationListener() {
 			
 			@Override
-			public void onAnimationStart(Animation animation) {
-				System.err.println("STARTED!");
-			}
+			public void onAnimationStart(Animation animation) {}
 			
 			@Override
 			public void onAnimationRepeat(Animation animation) {
@@ -99,9 +118,7 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 			}
 			
 			@Override
-			public void onAnimationEnd(Animation animation) {
-				
-			}
+			public void onAnimationEnd(Animation animation) {}
 		});
 	}
 	
@@ -120,11 +137,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar().getSelectedNavigationIndex());
 	}
 
-	protected void onResume() {
-		super.onResume();
-		if(themeUtils != null)
-			themeUtils.loadTheme(this, fragmentHolder, false);
-	}
+//	protected void onResume() {
+//		super.onResume();
+//		if(themeUtils != null)
+//			themeUtils.loadTheme(this, fragmentHolder, false);
+//	}
 	
 	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
@@ -153,11 +170,11 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 			url = null;
 			break;
 		}
-		Fragment fragment = new RedditFragment();
+		ListFragment fragment = new RedditFragment();
 		Bundle args = new Bundle();
 		args.putString(RedditFragment.ARG_SUBREDDIT_URL, url);
 		fragment.setArguments(args);
-		getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
 		if(refreshItem != null) {
 			// To make it not spin on category change (new -> hot)
@@ -182,8 +199,9 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_settings:
-				startActivity(new Intent(getBaseContext(),SettingsActivity.class));
+				startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 			case R.id.action_reload:
+				onReloadPressed();
 				RedditFragment.getThis().reloadPosts();
 			default:
 				// Nothing happens :)

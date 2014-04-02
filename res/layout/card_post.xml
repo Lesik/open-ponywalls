@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Taken from Google Now version 3.1.8.914827 for Android -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/post_background"
+    android:orientation="vertical" >
+
+	<FrameLayout
+	    android:background="@drawable/bg_keyboard_focusable"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:baselineAligned="false">
+	    
+	    <TextView
+	        android:id="@id/post_title"
+	        style="@style/post_text_title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/post_title_default" />
+	    
+	    <ImageButton
+			android:layout_gravity="end|top|center"
+			android:id="@id/threedot_button"
+			android:layout_width="@dimen/card_action_button_height"
+			android:layout_height="@dimen/card_action_button_height"
+			android:contentDescription="@string/accessibility_menu_button"
+			style="@style/CardMenuButton" />
+	    
+	</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginBottom="4.0dip"
+        android:layout_marginLeft="@dimen/card_padding"
+        android:layout_marginRight="@dimen/card_padding" >
+        
+		<TextView
+		    android:id="@id/post_author"
+		    style="@style/post_text_small"
+			android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/post_author_default" />
+		
+		<TextView
+            android:id="@id/post_separator"
+            style="@style/post_text_separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:text="@string/post_separator" />
+		
+		<TextView
+            android:id="@id/post_votes_prefix"
+            style="@style/post_text_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:text="@string/post_votes_prefix" />
+
+        <TextView
+            android:id="@id/post_votes"
+            style="@style/post_text_small"
+			android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/post_votes_count" />
+		
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <!--com.lesikapk.ponywalls.widget.ScaleImageView-->
+        <ImageView
+            android:id="@id/post_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/spinner_holo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@id/download_button"
+            style="@style/post_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="50"
+            android:drawableLeft="?attr/post_icon_download"
+            android:ellipsize="end"
+            android:text="@string/btn_download"
+            android:visibility="visible" />
+
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/set_wallpaper_button"
+            style="@style/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="?attr/post_icon_set_as_wallpaper" />
+        
+        <View
+		    android:layout_width="1dp"
+		    android:layout_height="fill_parent"
+		    android:background="@color/gray"/>
+        
+        <ImageButton
+            android:id="@id/share_button"
+            style="@style/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="?attr/post_icon_share" />
+
+    </LinearLayout>
+    <!-- android:drawableLeft="@drawable/ic_action_set_wallpaper" -->
+</LinearLayout>

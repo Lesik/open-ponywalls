@@ -1,14 +1,18 @@
 package com.lesikapk.ponywalls;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -37,6 +41,8 @@ public class SettingsActivity extends FragmentActivity {
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	PagerTitleStrip tabs; 
 	
+	boolean themeIsDark;
+	
 	ThemeUtils themeUtils;
 	SystemBarTintManager tintManager;
 	SystemBarTintManager.SystemBarConfig config;
@@ -49,18 +55,33 @@ public class SettingsActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+		// Initialize Theme
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		themeIsDark = prefs.getBoolean("dark_mode_enabled", false);
+		if(themeIsDark) {
+			setTheme(R.style.Theme_PonyWalls_Holo);
+		}
+		else {
+			setTheme(R.style.Theme_PonyWalls_Holo_Light);
+		}
+		mThis = this;
+
 		getWindow().setWindowAnimations(0);
 		setContentView(R.layout.activity_settings);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		tabs = (PagerTitleStrip)findViewById(R.id.pager_title_strip);
+		if(themeIsDark)
+			tabs.setBackgroundColor(getResources().getColor(R.color.app_color_holo));
+		else
+			tabs.setBackgroundColor(getResources().getColor(R.color.app_color_holo_light));
 		
-		// Load Utils
-		themeUtils = new ThemeUtils();
-		themeUtils.loadTheme(this, tabs, true);
-		mThis = this;
+		// Padding on Android 4.4+, disabled for now
+//		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//			System.out.println("KITKUTZ");
+//			SystemBarTintManager.SystemBarConfig tintManagerConfig = new SystemBarTintManager(this).getConfig();
+//			tabs.setPadding(0, tintManagerConfig.getPixelInsetTop(true), tintManagerConfig.getPixelInsetRight(), 0);
+//		}
 		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
@@ -69,7 +90,7 @@ public class SettingsActivity extends FragmentActivity {
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -97,11 +118,8 @@ public class SettingsActivity extends FragmentActivity {
 		return getThis().themeUtils;
 	}
 	
-	public static void reloadTheme(String newSettingsValue) {
-		// It is important to use loadThemeWithId here because the SharedPreferences get updated slowly. So we have to parse the theme that
-		// we get directly from the onPreferenceDismissListener or whatever its name was...phew that's complicated shit!
-		if(getThemeUtils() != null && getThis().tabs != null)
-			getThemeUtils().loadTheme(getThis(), getThis().tabs, true, newSettingsValue);
+	public static void recreateActivity() {
+		getThis().recreate();
 	}
 	
 	/**
@@ -118,7 +136,7 @@ public class SettingsActivity extends FragmentActivity {
 		public Fragment getItem(int position) {
 			int xml;
 			
-			if(position < 2) {
+//			if(position < 2) {
 				switch (position) {
 					case 0: xml = R.xml.preferences;
 						break;
@@ -133,20 +151,20 @@ public class SettingsActivity extends FragmentActivity {
 				args.putInt(SettingsFragment.ARG_SECTION_NUMBER, position + 1);
 				fragment.setArguments(args);
 				return fragment;
-			}
-			else {
-				Fragment fragment = new OtherFragment();
-				Bundle args = new Bundle();
-				args.putInt(OtherFragment.ARG_LAYOUT_XML, R.xml.help);
-				args.putInt(OtherFragment.ARG_SECTION_NUMBER, position + 1);
-				fragment.setArguments(args);
-				return fragment;
-			}
+//			}
+//			else {
+//				Fragment fragment = new OtherFragment();
+//				Bundle args = new Bundle();
+//				args.putInt(OtherFragment.ARG_LAYOUT_XML, R.layout.fragment_help);
+//				args.putInt(OtherFragment.ARG_SECTION_NUMBER, position + 1);
+//				fragment.setArguments(args);
+//				return fragment;
+//			}
 		}
 
 		@Override
 		public int getCount() {
-			return 3;
+			return 2;
 		}
 
 		@Override
@@ -191,25 +209,12 @@ public class SettingsActivity extends FragmentActivity {
 			// Could also be done by the tab number, which is passed to this Fragment, but meh :)
 			if(getArguments().getInt(ARG_PREFERENCE_XML) == R.xml.preferences) {
 				// Set onThemeChangedListener
-				final ListPreference themePreference = (ListPreference)findPreference("theme");
-				themePreference.setSummary(themePreference.getEntry());
+				final CheckBoxPreference themePreference = (CheckBoxPreference)findPreference("dark_mode_enabled");
+//				themePreference.setSummary(themePreference.getEntry());
 				
 				themePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 					public boolean onPreferenceChange(Preference preference, Object newValue) {
-						// Update the current theme in the summary
-						themePreference.setSummary(newValue.toString());
-						
-						SettingsActivity.reloadTheme(newValue.toString());
-						
-						Context context = getActivity().getApplicationContext();
-						// If the theme before the clicking 
-						if(SettingsActivity.getThemeUtils().isThemeDark(getActivity(), SettingsActivity.getThemeUtils().getThemeSetting(context))
-								!= SettingsActivity.getThemeUtils().isThemeDark(getActivity(), newValue.toString())) {
-							getActivity().finish();
-							getActivity().startActivity(getActivity().getIntent());
-						}
-//						getThemeUtils().createTransparency(getActivity(), getResources(), getActivity(), getThemeUtils().loadThemeWithId(
-//								getActivity(), getResources(), getActivity(), getActivity().getActionBar(), newValue.toString()));
+						SettingsActivity.recreateActivity();
 						return true;
 					}
 				});

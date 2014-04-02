@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+	<style name="Theme.PonyWalls.Holo" parent="@android:style/Theme.Holo">
+	    <!-- No, because we want the good old Android 4.0.4 blue line actionbar. I fucking love it! -->
+		<!--item name="android:actionBarStyle">@style/Widget.PonyWalls.ActionBar.Holo</item-->
+	    <item name="activity_background">@color/activity_background_holo_dark</item>
+	    
+   	    <item name="actionbar_icon_reload">@drawable/ic_action_refresh_drawable_light</item>
+   	    
+   	    <item name="post_background">@drawable/card_bg_holo_dark</item>
+   	    <item name="post_text_color">@color/post_text_holo_dark</item>
+	    <item name="post_icon_download">@drawable/ic_action_download_holo_dark</item>
+	    <item name="post_icon_set_as_wallpaper">@drawable/ic_action_wallpaper_holo_dark</item>
+	    <item name="post_icon_share">@drawable/ic_action_share_holo_dark</item>
+	</style>
+
+	<style name="Theme.PonyWalls.Holo.Light" parent="@android:style/Theme.Holo.Light">
+		<item name="activity_background">@color/activity_background_holo_light</item>
+		
+		<item name="android:actionBarStyle">@style/Widget.PonyWalls.ActionBar.Holo.Light</item>
+		
+		<item name="actionbar_icon_reload">@drawable/ic_action_refresh_drawable_dark</item>
+		<item name="post_background">@drawable/card_bg_holo_light</item>
+		<item name="post_text_color">@color/post_text_holo_light</item>
+		<item name="post_icon_download">@drawable/ic_action_wallpaper_holo_light</item>
+	    <item name="post_icon_set_as_wallpaper">@drawable/ic_action_wallpaper_holo_light</item>
+	    <item name="post_icon_share">@drawable/ic_action_share_holo_light</item>
+	</style>
+	
+	<style name="Widget.PonyWalls.ActionBar.Holo" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@color/app_color_holo</item>
+    </style>
+	
+	<style name="Widget.PonyWalls.ActionBar.Holo.Light" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@color/app_color_holo_light</item>
+    </style>
+	
+</resources>
