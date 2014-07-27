@@ -40,7 +40,7 @@
 	</style>
 	
 	<style name="post_text_large" parent="@style/post_text">
-		<item name="android:textSize">20sp</item>android:text="@string/post_title_default"
+		<item name="android:textSize">20sp</item>
 	</style>
 
 	<style name="post_text_title" parent="@style/post_text_large">
